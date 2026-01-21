@@ -1,44 +1,44 @@
 'use client';
 
 interface DealProps {
-    title: string;
-    image: string;
-    originalPrice: string;
-    discountedPrice: string;
-    rating: number;
-    reviewsCount: number;
-    discount: string;
-    category: string;
+  title: string;
+  image: string;
+  originalPrice: string;
+  discountedPrice: string;
+  rating: number;
+  reviewsCount: number;
+  discount: string;
+  category: string;
 }
 
 export default function DealCard({ deal }: { deal: DealProps }) {
-    return (
-        <div className="deal-card">
-            <div className="badge">{deal.discount}</div>
-            <div className="deal-image">
-                <img src={deal.image} alt={deal.title} />
-            </div>
-            <div className="deal-content">
-                <h3 className="deal-title">{deal.title}</h3>
-                <div className="deal-pricing">
-                    <span className="current-price">₹{deal.discountedPrice}</span>
-                    <span className="original-price">₹{deal.originalPrice}</span>
-                </div>
-                <div className="deal-rating">
-                    <span className="stars">{'★'.repeat(Math.floor(deal.rating))}{'☆'.repeat(5 - Math.floor(deal.rating))}</span>
-                    <span className="reviews">({deal.reviewsCount})</span>
-                </div>
-                <div className="deal-meta">
-                    <span className="category-tag"><span className="icon">🛡️</span> {deal.category}</span>
-                </div>
-            </div>
-            <div className="deal-action">
-                <button className="amazon-btn">
-                    Check on Amazon <span className="arrow">›</span>
-                </button>
-            </div>
+  return (
+    <div className="deal-card">
+      <div className="badge">{deal.discount}</div>
+      <div className="deal-image">
+        <img src={deal.image} alt={deal.title} />
+      </div>
+      <div className="deal-content">
+        <h3 className="deal-title">{deal.title}</h3>
+        <div className="deal-pricing">
+          <span className="current-price">₹{deal.discountedPrice}</span>
+          <span className="original-price">₹{deal.originalPrice}</span>
+        </div>
+        <div className="deal-rating">
+          <span className="stars">{'★'.repeat(Math.floor(deal.rating))}{'☆'.repeat(5 - Math.floor(deal.rating))}</span>
+          <span className="reviews">({deal.reviewsCount})</span>
+        </div>
+        <div className="deal-meta">
+          <span className="category-tag"><span className="icon">🛡️</span> {deal.category}</span>
+        </div>
+      </div>
+      <div className="deal-action">
+        <button className="amazon-btn">
+          Check on Amazon <span className="arrow">›</span>
+        </button>
+      </div>
 
-            <style jsx>{`
+      <style jsx>{`
         .deal-card {
           background: white;
           border-radius: 16px;
@@ -174,6 +174,6 @@ export default function DealCard({ deal }: { deal: DealProps }) {
           }
         }
       `}</style>
-        </div>
-    );
+    </div>
+  );
 }

@@ -23,150 +23,224 @@ export default function DealProductCard({
 }: ProductProps) {
     return (
         <div className="product-card">
-            <div className="card-inner">
-                {/* Top: Image Section */}
-                <div className="image-section">
-                    <img src={image} alt={title} />
-                    {discount && <div className="discount-badge">{discount}</div>}
-                </div>
-
-                {/* Bottom: Details Section */}
-                <div className="details-section">
-                    <h3 className="title">{title}</h3>
-
-                    <div className="rating-block">
-                        <span className="stars">
-                            {[...Array(5)].map((_, i) => (
-                                <span key={i} className={i < Math.floor(rating) ? "star filled" : "star"}>{i < Math.floor(rating) ? '★' : '☆'}</span>
-                            ))}
-                        </span>
-                        <span className="count">({reviewsCount})</span>
+            <a href={link} target="_blank" rel="noopener noreferrer" className="card-link">
+                <div className="card-inner">
+                    {/* Image Section */}
+                    <div className="image-section">
+                        <img src={image} alt={title} />
+                        {discount && <div className="discount-badge">{discount}</div>}
                     </div>
 
-                    <div className="price-block">
-                        <span className="current-price">₹{discountedPrice}</span>
-                        <span className="mrp">M.R.P: <span className="strike">₹{originalPrice}</span></span>
-                    </div>
+                    {/* Details Section */}
+                    <div className="details-section">
+                        <h3 className="title">{title}</h3>
 
-                    <button className="add-to-cart-btn">
-                        Add to cart
-                    </button>
+                        <div className="rating-block">
+                            <span className="stars">
+                                {[...Array(5)].map((_, i) => (
+                                    <span key={i} className={i < Math.floor(rating) ? "star filled" : "star"}>
+                                        {i < Math.floor(rating) ? '★' : '☆'}
+                                    </span>
+                                ))}
+                            </span>
+                            <span className="count">({reviewsCount})</span>
+                        </div>
+
+                        <div className="price-block">
+                            <span className="current-price">₹{discountedPrice}</span>
+                            <span className="mrp">M.R.P: <span className="strike">₹{originalPrice}</span></span>
+                        </div>
+
+                        <button className="amazon-btn">
+                            🛒 Check Price on Amazon
+                        </button>
+                    </div>
                 </div>
-            </div>
+            </a>
 
             <style jsx>{`
         .product-card {
-          background: white;
-          border: 1px solid #e0e0e0;
-          border-radius: 4px;
+          background: var(--card-gradient);
+          border: 1px solid rgba(212, 175, 55, 0.15);
+          border-radius: var(--border-radius-lg);
           overflow: hidden;
-          transition: box-shadow 0.2s;
+          transition: all var(--transition-smooth);
+          height: 100%;
+          position: relative;
+        }
+        
+        .product-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 2px;
+          background: var(--gold-gradient);
+          opacity: 0;
+          transition: opacity var(--transition-smooth);
+        }
+        
+        .product-card:hover {
+          transform: translateY(-5px);
+          box-shadow: var(--shadow-xl);
+          border-color: var(--royal-gold);
+        }
+        
+        .product-card:hover::before {
+          opacity: 1;
+        }
+        
+        .card-link {
+          text-decoration: none;
+          color: inherit;
           display: flex;
           flex-direction: column;
           height: 100%;
         }
-        .product-card:hover {
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
 
         .card-inner {
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
+          padding: 1.25rem;
+          display: flex;
+          flex-direction: column;
+          flex-grow: 1;
         }
 
         .image-section {
-            position: relative;
-            background: #f7f7f7;
-            height: 200px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 10px;
+          position: relative;
+          background: rgba(26, 26, 26, 0.5);
+          border: 1px solid rgba(212, 175, 55, 0.1);
+          border-radius: var(--border-radius-md);
+          height: 200px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 1rem;
+          overflow: hidden;
         }
+        
         .image-section img {
-            max-width: 100%;
-            max-height: 180px;
-            object-fit: contain;
+          max-width: 100%;
+          max-height: 180px;
+          object-fit: contain;
+          transition: transform var(--transition-smooth);
         }
+        
+        .product-card:hover .image-section img {
+          transform: scale(1.05);
+        }
+        
         .discount-badge {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            background: #CC0C39;
-            color: white;
-            padding: 2px 6px;
-            font-size: 0.75rem;
-            border-radius: 2px;
-            font-weight: 700;
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          background: var(--gold-gradient);
+          color: var(--midnight-black);
+          padding: 0.4rem 0.8rem;
+          font-size: 0.85rem;
+          border-radius: var(--border-radius-sm);
+          font-weight: 700;
+          box-shadow: var(--gold-shadow);
         }
 
         .details-section {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            flex-grow: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem;
+          flex-grow: 1;
         }
 
         .title {
-            font-size: 1rem;
-            font-weight: 500;
-            color: #0F1111;
-            line-height: 1.3;
-            max-height: 2.6em; 
-            overflow: hidden;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical; 
+          font-size: 1rem;
+          font-weight: 600;
+          color: var(--soft-white);
+          line-height: 1.4;
+          max-height: 2.8em;
+          overflow: hidden;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
         }
 
         .rating-block {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 0.85rem;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          font-size: 0.9rem;
         }
+        
         .stars {
-            color: #FFA41C;
-            letter-spacing: -1px;
+          color: var(--royal-gold);
+          letter-spacing: -1px;
+          font-size: 1rem;
         }
+        
         .count {
-            color: #007185;
+          color: var(--medium-gray);
+          font-size: 0.85rem;
         }
 
         .price-block {
-            margin-top: auto; /* Push to bottom of details if needed */
+          margin-top: auto;
+          padding-top: 0.5rem;
         }
+        
         .current-price {
-            font-size: 1.2rem;
-            font-weight: 500;
-            color: #0F1111;
-            margin-right: 6px;
+          font-size: 1.4rem;
+          font-weight: 700;
+          background: var(--gold-gradient);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          margin-right: 0.5rem;
         }
+        
         .mrp {
-            font-size: 0.85rem;
-            color: #565959;
+          font-size: 0.85rem;
+          color: var(--medium-gray);
         }
+        
         .strike {
-            text-decoration: line-through;
+          text-decoration: line-through;
+          opacity: 0.7;
         }
 
-        .add-to-cart-btn {
-            background: #FFD814;
-            border: 1px solid #FCD200;
-            border-radius: 20px;
-            padding: 6px 12px;
-            margin-top: 10px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            color: #0F1111;
-            box-shadow: 0 2px 5px rgba(213,217,217,0.5);
-            transition: background 0.2s;
-            width: fit-content;
+        .amazon-btn {
+          background: var(--amazon-orange);
+          border: none;
+          border-radius: var(--border-radius-md);
+          padding: 0.75rem 1.25rem;
+          margin-top: 1rem;
+          cursor: pointer;
+          font-size: 0.95rem;
+          font-weight: 700;
+          color: var(--midnight-black);
+          box-shadow: 0 4px 12px var(--amazon-orange-glow);
+          transition: all var(--transition-smooth);
+          width: 100%;
+          position: relative;
+          overflow: hidden;
         }
-        .add-to-cart-btn:hover {
-            background: #F7CA00;
+        
+        .amazon-btn::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+          transition: left 0.5s;
+        }
+        
+        .amazon-btn:hover {
+          background: var(--amazon-orange-hover);
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(255, 153, 0, 0.4);
+        }
+        
+        .amazon-btn:hover::before {
+          left: 100%;
         }
       `}</style>
         </div>

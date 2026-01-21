@@ -1,35 +1,44 @@
 'use client';
 
+import Link from 'next/link';
+
 interface BlogProps {
-    title: string;
-    image: string;
-    rating: number;
-    date: string;
-    excerpt: string;
-    category: string;
+  id: string;
+  title: string;
+  image: string;
+  rating: number;
+  date: string;
+  excerpt: string;
+  category: string;
 }
 
 export default function BlogCard({ article }: { article: BlogProps }) {
-    return (
-        <div className="blog-card">
-            <div className="blog-image">
-                <img src={article.image} alt={article.title} />
-            </div>
-            <div className="blog-content">
-                <h3 className="blog-title">{article.title}</h3>
-                <div className="blog-meta">
-                    <span className="stars">{'★'.repeat(Math.floor(article.rating))}{'☆'.repeat(5 - Math.floor(article.rating))}</span>
-                    <span className="date">{article.date}</span>
-                </div>
-                <p className="blog-excerpt">{article.excerpt}</p>
-            </div>
-            <div className="blog-action">
-                <button className="read-btn">
-                    Read More <span className="arrow">›</span>
-                </button>
-            </div>
-
-            <style jsx>{`
+  return (
+    <Link href={`/blog/${article.id}`} className="blog-card-link">
+      <div className="blog-card">
+        <div className="blog-image">
+          <img src={article.image} alt={article.title} />
+        </div>
+        <div className="blog-content">
+          <h3 className="blog-title">{article.title}</h3>
+          <div className="blog-meta">
+            <span className="stars">{'★'.repeat(Math.floor(article.rating))}{'☆'.repeat(5 - Math.floor(article.rating))}</span>
+            <span className="date">{article.date}</span>
+          </div>
+          <p className="blog-excerpt">{article.excerpt}</p>
+        </div>
+        <div className="blog-action">
+          <button className="read-btn">
+            Read More <span className="arrow">›</span>
+          </button>
+        </div>
+      </div>
+      <style jsx>{`
+        .blog-card-link {
+          text-decoration: none;
+          color: inherit;
+          display: block;
+        }
         .blog-card {
           background: white;
           border-radius: 16px;
@@ -137,6 +146,6 @@ export default function BlogCard({ article }: { article: BlogProps }) {
           }
         }
       `}</style>
-        </div>
-    );
+    </Link>
+  );
 }

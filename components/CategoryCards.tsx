@@ -23,77 +23,179 @@ export default function CategoryCards() {
 
   return (
     <section className="categories">
-      <div className="container grid">
-        {categories.map((cat: any, idx) => (
-          <Link href={cat.link || '#'} key={idx} style={{ textDecoration: 'none', display: 'block' }}>
-            <div className="category-card">
-              <div className="card-image">
-                <img src={cat.image} alt={cat.name} />
+      <div className="container">
+        <h2 className="section-title">
+          Shop by <span>Category</span>
+        </h2>
+        <div className="grid">
+          {categories.map((cat: any, idx) => (
+            <Link href={cat.link || '#'} key={idx} style={{ textDecoration: 'none', display: 'block' }}>
+              <div className="category-card">
+                <div className="card-overlay"></div>
+                <div className="card-image">
+                  <img src={cat.image} alt={cat.name} />
+                </div>
+                <div className="card-label">
+                  <span className="label-text">{cat.name}</span>
+                  <svg className="arrow-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </div>
               </div>
-              <div className="card-label">
-                {cat.name}
-              </div>
-            </div>
-          </Link>
-        ))}
+            </Link>
+          ))}
+        </div>
       </div>
       <style jsx>{`
         .categories {
-          padding: clamp(3rem, 8vw, 5rem) 0;
-          overflow: hidden;
-          background: #f8fafc;
+          padding: clamp(2rem, 6vw, 3rem) 0;
+          background: var(--midnight-black);
+          position: relative;
         }
+        
+        .categories::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.03) 0%, transparent 70%);
+          pointer-events: none;
+        }
+        
+        .container {
+          position: relative;
+          z-index: 2;
+        }
+        
+        .section-title {
+          text-align: center;
+          font-size: clamp(2rem, 5vw, 2.8rem);
+          font-weight: 800;
+          margin-bottom: 3rem;
+          color: var(--soft-white);
+        }
+        
+        .section-title span {
+          background: var(--gold-gradient);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+        
         .grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-          gap: 2.5rem;
+          gap: 2rem;
         }
+        
         .category-card {
-          background: white;
-          border-radius: 20px;
+          background: var(--card-gradient);
+          border: 1px solid rgba(212, 175, 55, 0.15);
+          border-radius: var(--border-radius-lg);
           overflow: hidden;
-          box-shadow: 0 10px 30px rgba(0,0,0,0.05);
           cursor: pointer;
           position: relative;
           height: 400px;
-          transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-          border: 1px solid #f1f5f9;
+          transition: all var(--transition-smooth);
         }
+        
+        .category-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 3px;
+          background: var(--gold-gradient);
+          opacity: 0;
+          transition: opacity var(--transition-smooth);
+          z-index: 3;
+        }
+        
         .category-card:hover {
-          transform: translateY(-12px);
-          box-shadow: 0 20px 40px rgba(45, 90, 67, 0.1);
-          border-color: var(--primary-green-light);
+          transform: translateY(-10px);
+          box-shadow: var(--shadow-xl);
+          border-color: var(--royal-gold);
         }
+        
+        .category-card:hover::before {
+          opacity: 1;
+        }
+        
+        .card-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(180deg, transparent 0%, rgba(10, 10, 10, 0.8) 100%);
+          z-index: 2;
+          transition: opacity var(--transition-smooth);
+        }
+        
         .card-image {
           height: 100%;
           display: flex;
           align-items: center;
-          justifyContent: center;
-          padding: 0;
-          background: radial-gradient(circle at center, #fff 0%, #f8fafc 100%);
+          justify-content: center;
+          position: relative;
+          z-index: 1;
         }
+        
         .card-image img {
           width: 100%;
           height: 100%;
           object-fit: cover;
-          border-radius: 12px;
-          filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));
-          transition: transform 0.4s ease;
+          transition: transform var(--transition-smooth);
         }
+        
         .category-card:hover .card-image img {
-          transform: scale(1.05);
+          transform: scale(1.08);
         }
+        
         .card-label {
           position: absolute;
           bottom: 0;
           width: 100%;
-          background: var(--accent-gradient);
-          padding: 1.4rem;
-          color: white;
-          text-align: center;
+          padding: 1.75rem 1.5rem;
+          z-index: 3;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(255, 215, 0, 0.1) 100%);
+          backdrop-filter: blur(10px);
+          border-top: 1px solid rgba(212, 175, 55, 0.3);
+        }
+        
+        .label-text {
+          color: var(--soft-white);
           font-weight: 700;
-          font-size: 1.2rem;
+          font-size: 1.3rem;
           letter-spacing: 0.02em;
+          text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+        }
+        
+        .arrow-icon {
+          color: var(--royal-gold);
+          transition: transform var(--transition-smooth);
+          filter: drop-shadow(0 2px 4px rgba(212, 175, 55, 0.6));
+        }
+        
+        .category-card:hover .arrow-icon {
+          transform: translateX(5px);
+        }
+        
+        @media (max-width: 768px) {
+          .grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+          }
+          
+          .category-card {
+            height: 350px;
+          }
         }
       `}</style>
     </section>

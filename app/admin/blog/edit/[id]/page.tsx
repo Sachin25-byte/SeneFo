@@ -4,7 +4,8 @@ import { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function EditBlogPage({ params }: { params: Promise<{ id: string }> }) {
-    const { id } = use(params);
+    const unwrappedParams = use(params);
+    const { id } = unwrappedParams;
     const router = useRouter();
     const [formData, setFormData] = useState({
         title: '',
