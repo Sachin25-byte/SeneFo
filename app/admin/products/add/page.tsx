@@ -124,16 +124,26 @@ export default function AddProductPage() {
                 .add-product {
                     max-width: 600px;
                     margin: 0 auto;
+                    animation: fadeIn 0.5s ease-out;
+                }
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: translateY(10px); }
+                    to { opacity: 1; transform: translateY(0); }
                 }
                 h1 {
-                    margin-bottom: 2rem;
-                    color: #1a4231;
+                    margin-bottom: 2.5rem;
+                    color: var(--text-main);
+                    font-family: var(--font-heading);
+                    font-weight: 800;
+                    font-size: 2.25rem;
+                    letter-spacing: -0.02em;
                 }
                 .form-container {
                     background: white;
-                    padding: 2rem;
-                    border-radius: 12px;
-                    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+                    padding: 2.5rem;
+                    border-radius: var(--border-radius-xl);
+                    box-shadow: var(--shadow-lg);
+                    border: 1px solid var(--bg-tertiary);
                 }
                 .form-group {
                     margin-bottom: 1.5rem;
@@ -150,34 +160,51 @@ export default function AddProductPage() {
                         flex-direction: column;
                         gap: 1rem;
                     }
+                    .form-container {
+                        padding: 1.5rem;
+                    }
                 }
                 label {
                     display: block;
                     margin-bottom: 0.5rem;
-                    font-weight: 600;
-                    color: #444;
+                    font-weight: 700;
+                    color: var(--text-main);
+                    font-size: 0.9rem;
                 }
                 input {
                     width: 100%;
-                    padding: 10px;
-                    border: 1px solid #ddd;
-                    border-radius: 6px;
+                    padding: 12px;
+                    border: 1px solid var(--bg-tertiary);
+                    border-radius: var(--border-radius-md);
                     font-size: 1rem;
+                    background: var(--bg-secondary);
+                    transition: all var(--transition-fast);
+                    font-family: var(--font-primary);
+                }
+                input:focus {
+                    outline: none;
+                    border-color: var(--accent-blue);
+                    background: white;
+                    box-shadow: 0 0 0 4px var(--accent-blue-glow);
                 }
                 .submit-btn {
                     width: 100%;
-                    padding: 12px;
-                    background: #2d5a43;
+                    padding: 14px;
+                    background: var(--accent-blue);
                     color: white;
                     border: none;
-                    border-radius: 8px;
-                    font-weight: 700;
+                    border-radius: var(--border-radius-md);
+                    font-weight: 800;
                     font-size: 1rem;
                     cursor: pointer;
                     margin-top: 1rem;
+                    transition: all var(--transition-fast);
+                    box-shadow: 0 4px 12px rgba(19, 114, 154, 0.2);
                 }
                 .submit-btn:hover {
-                    background: #1e3d2d;
+                    background: var(--accent-blue-hover);
+                    transform: translateY(-2px);
+                    box-shadow: 0 6px 16px rgba(19, 114, 154, 0.3);
                 }
             `}</style>
         </div>

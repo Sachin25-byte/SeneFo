@@ -75,7 +75,7 @@ export default function ReviewsPage() {
           text-align: center;
           font-size: 2.2rem;
           font-weight: 800;
-          color: #2d5a43;
+          color: var(--accent-red);
           margin-bottom: 2.5rem;
         }
         .search-container {
@@ -94,7 +94,7 @@ export default function ReviewsPage() {
           transition: border-color 0.2s;
         }
         .search-input:focus {
-          border-color: #2d5a43;
+          border-color: var(--accent-red);
         }
         .filter-container {
           display: flex;
@@ -117,9 +117,9 @@ export default function ReviewsPage() {
           gap: 0.5rem;
         }
         .filter-chip.active {
-          background: #2d5a43;
+          background: var(--accent-red);
           color: white;
-          border-color: #2d5a43;
+          border-color: var(--accent-red);
         }
         .down-arrow {
           font-size: 0.8rem;

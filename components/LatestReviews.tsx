@@ -39,49 +39,39 @@ export default function LatestReviews() {
 
             <style jsx>{`
                 .latest-reviews {
-                    padding: clamp(4rem, 10vw, 6rem) 0;
-                    background: var(--midnight-black);
+                    padding: 3rem 0;
+                    background: var(--bg-primary);
                 }
                 
                 .header-section {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    margin-bottom: 3rem;
+                    margin-bottom: 2rem;
                     flex-wrap: wrap;
                     gap: 1.5rem;
                 }
                 
-                .section-title {
-                    margin: 0;
-                    font-size: clamp(2rem, 5vw, 2.8rem);
-                    font-weight: 800;
-                    color: var(--soft-white);
-                }
-                
                 .section-title span {
-                    background: var(--gold-gradient);
-                    -webkit-background-clip: text;
-                    -webkit-text-fill-color: transparent;
-                    background-clip: text;
+                    color: var(--accent-red);
                 }
                 
                 .view-all-link {
                     display: inline-flex;
                     align-items: center;
                     gap: 0.5rem;
-                    color: var(--royal-gold);
+                    color: var(--text-main);
                     font-weight: 700;
-                    font-size: 1.05rem;
+                    font-size: 0.95rem;
                     transition: all var(--transition-fast);
-                    padding: 0.75rem 1.5rem;
-                    border: 2px solid var(--royal-gold);
+                    padding: 10px 20px;
+                    border: 1px solid var(--text-main);
                     border-radius: var(--border-radius-md);
                 }
                 
                 .view-all-link:hover {
-                    background: var(--royal-gold);
-                    color: var(--midnight-black);
+                    background: var(--text-main);
+                    color: #FFFFFF;
                     transform: translateX(5px);
                 }
                 

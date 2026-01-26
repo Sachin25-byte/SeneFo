@@ -10,7 +10,11 @@ export default function FeaturedDeals() {
     useEffect(() => {
         fetch('/api/products')
             .then(res => res.json())
-            .then(data => setProducts(data.slice(0, 4)))
+            .then(data => {
+                // Filter out inactive products
+                const activeProducts = data.filter((p: any) => p.isActive !== false);
+                setProducts(activeProducts.slice(0, 10));
+            })
             .catch(err => console.error('Error fetching products:', err));
     }, []);
 
@@ -30,70 +34,59 @@ export default function FeaturedDeals() {
                         </svg>
                     </Link>
                 </div>
-                <div className="products-grid">
+                <div className="products-slider">
                     {products.map((product) => (
-                        <DealProductCard
-                            key={product.id}
-                            image={product.image}
-                            title={product.title}
-                            link={product.link}
-                            originalPrice={product.originalPrice}
-                            discountedPrice={product.discountedPrice}
-                            rating={product.rating}
-                            reviewsCount={product.reviewsCount}
-                            discount={product.discount}
-                        />
+                        <div key={product.id} className="slider-item">
+                            <DealProductCard
+                                image={product.image}
+                                title={product.title}
+                                link={product.link}
+                                originalPrice={product.originalPrice}
+                                discountedPrice={product.discountedPrice}
+                                rating={product.rating}
+                                reviewsCount={product.reviewsCount}
+                                discount={product.discount}
+                            />
+                        </div>
                     ))}
                 </div>
             </div>
 
             <style jsx>{`
                 .featured-deals {
-                    padding: clamp(4rem, 10vw, 6rem) 0;
-                    background: radial-gradient(ellipse at center, rgba(212, 175, 55, 0.02) 0%, var(--midnight-black) 70%);
-                    position: relative;
+                    padding: 3rem 0;
+                    background: var(--bg-secondary);
                 }
                 
                 .header-section {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    margin-bottom: 3rem;
+                    margin-bottom: 2rem;
                     flex-wrap: wrap;
                     gap: 1.5rem;
                 }
                 
-                .section-title {
-                    margin: 0;
-                    font-size: clamp(2rem, 5vw, 2.8rem);
-                    font-weight: 800;
-                    color: var(--soft-white);
-                }
-                
                 .section-title span {
-                    background: var(--gold-gradient);
-                    -webkit-background-clip: text;
-                    -webkit-text-fill-color: transparent;
-                    background-clip: text;
+                    color: var(--accent-red);
                 }
                 
                 .view-all-link {
                     display: inline-flex;
                     align-items: center;
                     gap: 0.5rem;
-                    color: var(--royal-gold);
+                    color: var(--text-main);
                     font-weight: 700;
-                    font-size: 1.05rem;
+                    font-size: 0.95rem;
                     transition: all var(--transition-fast);
-                    padding: 0.75rem 1.5rem;
-                    border: 2px solid var(--royal-gold);
+                    padding: 10px 20px;
+                    border: 1px solid var(--text-main);
                     border-radius: var(--border-radius-md);
-                    background: transparent;
                 }
                 
                 .view-all-link:hover {
-                    background: var(--royal-gold);
-                    color: var(--midnight-black);
+                    background: var(--text-main);
+                    color: #FFFFFF;
                     transform: translateX(5px);
                 }
                 
@@ -105,13 +98,42 @@ export default function FeaturedDeals() {
                     transform: translateX(3px);
                 }
                 
-                .products-grid {
-                    display: grid;
-                    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-                    gap: 2rem;
+                .products-slider {
+                    display: flex;
+                    gap: 1.5rem;
+                    overflow-x: auto;
+                    padding: 1rem 0 2rem;
+                    scroll-snap-type: x mandatory;
+                    -webkit-overflow-scrolling: touch;
+                }
+                
+                .products-slider::-webkit-scrollbar {
+                    height: 6px;
+                }
+                
+                .products-slider::-webkit-scrollbar-track {
+                    background: rgba(0,0,0,0.05);
+                    border-radius: 10px;
+                }
+                
+                .products-slider::-webkit-scrollbar-thumb {
+                    background: var(--accent-red);
+                    border-radius: 10px;
+                }
+
+                .slider-item {
+                    flex: 0 0 400px;
+                    width: 400px;
+                    height: 600px;
+                    scroll-snap-align: start;
                 }
                 
                 @media (max-width: 768px) {
+                    .slider-item {
+                        flex: 0 0 300px;
+                        width: 300px;
+                        height: 500px;
+                    }
                     .header-section {
                         flex-direction: column;
                         align-items: flex-start;
@@ -121,9 +143,13 @@ export default function FeaturedDeals() {
                         width: 100%;
                         justify-content: center;
                     }
-                    
-                    .products-grid {
-                        grid-template-columns: 1fr;
+                }
+
+                @media (max-width: 480px) {
+                    .slider-item {
+                        flex: 0 0 260px;
+                        width: 260px;
+                        height: 400px;
                     }
                 }
             `}</style>

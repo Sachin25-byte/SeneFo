@@ -85,69 +85,96 @@ export default function AdminDashboard() {
       </div>
 
       <style jsx>{`
+        .dashboard {
+          animation: fadeIn 0.5s ease-out;
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
         .page-title {
-          font-size: 2rem;
-          color: #1a4231;
-          margin-bottom: 2rem;
+          font-size: 2.25rem;
+          color: var(--text-main);
+          margin-bottom: 2.5rem;
+          font-family: var(--font-heading);
+          font-weight: 800;
+          letter-spacing: -0.02em;
         }
         .stats-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
           gap: 1.5rem;
-          margin-bottom: 3rem;
+          margin-bottom: 3.5rem;
         }
         .stat-card {
           background: white;
-          padding: 1.5rem;
-          border-radius: 12px;
-          box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+          padding: 1.75rem;
+          border-radius: var(--border-radius-xl);
+          box-shadow: var(--shadow-md);
           display: flex;
           align-items: center;
           gap: 1.5rem;
+          transition: transform var(--transition-smooth), box-shadow var(--transition-smooth);
+          border: 1px solid var(--bg-tertiary);
+        }
+        .stat-card:hover {
+          transform: translateY(-5px);
+          box-shadow: var(--shadow-lg);
+          border-color: var(--accent-blue);
         }
         .stat-icon {
-          font-size: 2.5rem;
-          background: #f0f7f4;
-          width: 60px;
-          height: 60px;
+          font-size: 2rem;
+          background: var(--accent-blue-light);
+          width: 64px;
+          height: 64px;
           display: flex;
           align-items: center;
           justify-content: center;
-          border-radius: 50%;
+          border-radius: 16px;
+          color: var(--accent-blue);
         }
         .stat-info h3 {
-          font-size: 0.9rem;
-          color: #666;
-          margin-bottom: 0.2rem;
+          font-size: 0.95rem;
+          color: var(--text-muted);
+          margin-bottom: 0.25rem;
+          font-weight: 600;
         }
         .stat-info .value {
-          font-size: 1.8rem;
-          font-weight: 700;
-          color: #1a4231;
+          font-size: 2rem;
+          font-weight: 800;
+          color: var(--text-main);
+          font-family: var(--font-heading);
         }
         .recent-activity h2 {
           font-size: 1.5rem;
-          color: #1a4231;
+          color: var(--text-main);
           margin-bottom: 1.5rem;
+          font-family: var(--font-heading);
+          font-weight: 700;
         }
         .actions-grid {
           display: flex;
           gap: 1rem;
+          flex-wrap: wrap;
         }
         .action-btn {
           padding: 1rem 2rem;
-          background: #2d5a43;
+          background: var(--accent-blue);
           color: white;
           border: none;
-          border-radius: 8px;
-          font-weight: 600;
+          border-radius: var(--border-radius-md);
+          font-weight: 700;
           cursor: pointer;
-          transition: background 0.2s;
+          transition: all var(--transition-fast);
           text-decoration: none;
-          display: inline-block;
+          display: inline-flex;
+          align-items: center;
+          box-shadow: 0 4px 12px rgba(19, 114, 154, 0.2);
         }
         .action-btn:hover {
-          background: #1e3d2d;
+          background: var(--accent-blue-hover);
+          transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba(19, 114, 154, 0.3);
         }
       `}</style>
     </div>

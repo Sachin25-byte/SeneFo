@@ -59,12 +59,70 @@ export default function CategoriesPage() {
                 </table>
             </div>
             <style jsx>{`
-                .page-title { margin-bottom: 2rem; color: #1a4231; }
-                .admin-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; min-width: 600px; }
-                th, td { padding: 1rem; text-align: left; border-bottom: 1px solid #eee; }
-                th { background: #f8fafc; font-weight: 600; }
-                .thumb { width: 40px; height: 40px; object-fit: cover; border-radius: 4px; }
-                .del-btn { background: #fee2e2; color: #dc2626; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; }
+                .admin-page {
+                    animation: fadeIn 0.5s ease-out;
+                }
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: translateY(10px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                .page-title {
+                    font-family: var(--font-heading);
+                    font-size: 2.25rem;
+                    font-weight: 800;
+                    color: var(--text-main);
+                    margin-bottom: 2.5rem;
+                    letter-spacing: -0.02em;
+                }
+                .table-container {
+                    background: white;
+                    border-radius: var(--border-radius-xl);
+                    box-shadow: var(--shadow-md);
+                    border: 1px solid var(--bg-tertiary);
+                    overflow: hidden;
+                }
+                .admin-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    min-width: 600px;
+                }
+                th, td {
+                    padding: 1.25rem 1.5rem;
+                    text-align: left;
+                    border-bottom: 1px solid var(--bg-tertiary);
+                }
+                th {
+                    background: var(--bg-secondary);
+                    font-weight: 700;
+                    color: var(--text-muted);
+                    font-size: 0.9rem;
+                    text-transform: uppercase;
+                    letter-spacing: 0.05em;
+                }
+                .thumb {
+                    width: 60px;
+                    height: 60px;
+                    object-fit: contain;
+                    border-radius: var(--border-radius-md);
+                    background: var(--bg-tertiary);
+                    padding: 4px;
+                }
+                .del-btn {
+                    background: #fee2e2;
+                    color: #dc2626;
+                    border: none;
+                    padding: 8px 16px;
+                    border-radius: var(--border-radius-md);
+                    cursor: pointer;
+                    font-weight: 700;
+                    transition: all var(--transition-fast);
+                    font-size: 0.85rem;
+                }
+                .del-btn:hover {
+                    background: #dc2626;
+                    color: white;
+                    transform: translateY(-1px);
+                }
                 
                 @media (max-width: 768px) {
                     .admin-table { min-width: 100%; }
@@ -72,26 +130,25 @@ export default function CategoriesPage() {
                     .admin-table tr {
                         display: block;
                         background: white;
-                        margin-bottom: 1rem;
-                        border: 1px solid #eee;
-                        border-radius: 8px;
-                        box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+                        margin-bottom: 1.5rem;
+                        border: 1px solid var(--bg-tertiary);
+                        border-radius: var(--border-radius-lg);
+                        padding: 1rem;
                     }
                     .admin-table td {
                         display: flex;
                         align-items: center;
                         justify-content: space-between;
-                        padding: 0.8rem 1rem;
-                        border-bottom: 1px solid #f0f0f0;
+                        padding: 0.75rem 0;
+                        border-bottom: 1px solid var(--bg-tertiary);
                         text-align: right;
                     }
                     .admin-table td::before {
                         content: attr(data-label);
-                        font-weight: 600;
-                        color: #666;
-                        margin-right: 1rem;
+                        font-weight: 700;
+                        color: var(--text-muted);
                     }
-                    .admin-table td:last-child { border-bottom: none; }
+                    .admin-table td:last-child { border-bottom: none; padding-top: 1rem; }
                 }
             `}</style>
         </div>

@@ -40,36 +40,37 @@ export default function BlogCard({ article }: { article: BlogProps }) {
           display: block;
         }
         .blog-card {
-          background: white;
-          border-radius: 16px;
+          background: #FFFFFF;
+          border-radius: var(--border-radius-lg);
           padding: 1.5rem;
           display: flex;
           align-items: center;
           gap: 2rem;
           position: relative;
-          box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+          box-shadow: var(--shadow-sm);
           margin-bottom: 1.5rem;
-          transition: transform 0.2s ease;
-          border: 1px solid #f0f0f0;
+          transition: all var(--transition-smooth);
+          border: 1px solid var(--bg-tertiary);
         }
         .blog-card:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+          transform: translateY(-4px);
+          box-shadow: var(--shadow-xl);
+          border-color: var(--accent-red);
         }
         .blog-image {
-          width: 140px;
-          height: 140px;
+          width: 120px;
+          height: 120px;
           flex-shrink: 0;
           display: flex;
           align-items: center;
-          justifyContent: center;
-          background: #f8fafc;
-          border-radius: 12px;
+          justify-content: center;
+          background: var(--bg-secondary);
+          border-radius: var(--border-radius-md);
           overflow: hidden;
         }
         .blog-image img {
-          max-width: 100%;
-          max-height: 100%;
+          max-width: 90%;
+          max-height: 90%;
           object-fit: contain;
         }
         .blog-content {
@@ -77,8 +78,8 @@ export default function BlogCard({ article }: { article: BlogProps }) {
         }
         .blog-title {
           font-size: 1.25rem;
-          font-weight: 700;
-          color: #1a1a1a;
+          font-weight: 800;
+          color: var(--text-main);
           margin-bottom: 0.5rem;
         }
         .blog-meta {
@@ -88,36 +89,40 @@ export default function BlogCard({ article }: { article: BlogProps }) {
           margin-bottom: 0.8rem;
         }
         .stars {
-          color: #fbbf24;
-          font-size: 1.1rem;
+          color: #FFB400;
+          font-size: 1rem;
         }
         .date {
-          color: #888;
-          font-size: 0.9rem;
+          color: var(--text-dim);
+          font-size: 0.85rem;
         }
         .blog-excerpt {
-          color: #666;
+          color: var(--text-muted);
           font-size: 0.95rem;
           margin-bottom: 0;
           line-height: 1.5;
           max-width: 500px;
         }
+        .blog-action {
+          flex-shrink: 0;
+        }
         .read-btn {
-          background: #2d5a43;
-          color: white;
+          background: var(--text-main);
+          color: #FFFFFF;
           border: none;
           padding: 12px 24px;
-          border-radius: 8px;
+          border-radius: var(--border-radius-md);
           font-weight: 700;
           cursor: pointer;
           display: flex;
           align-items: center;
           gap: 0.8rem;
-          transition: background 0.2s ease;
+          transition: all var(--transition-fast);
           white-space: nowrap;
         }
         .read-btn:hover {
-          background: #1e3d2d;
+          background: var(--accent-red);
+          transform: scale(1.05);
         }
         .arrow {
           font-size: 1.4rem;

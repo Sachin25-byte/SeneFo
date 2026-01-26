@@ -1,3 +1,5 @@
+'use client';
+
 export default function DisclosurePage() {
     return (
         <div className="policy-page">

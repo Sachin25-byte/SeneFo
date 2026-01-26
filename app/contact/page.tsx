@@ -28,6 +28,9 @@ export default function ContactPage() {
                 <div className="contact-card">
                     <h1 className="page-title">Contact Us</h1>
                     <p className="page-lead">Have questions or feedback? We'd love to hear from you. Send us a message and we'll get back to you as soon as possible.</p>
+                    <p className="contact-email">
+                        <strong>Email:</strong> <a href="mailto:support@senefo.com">support@senefo.com</a>
+                    </p>
 
                     {submitted ? (
                         <div className="success-message">
@@ -111,14 +114,28 @@ export default function ContactPage() {
                     text-align: center;
                     font-size: 2.5rem;
                     font-weight: 800;
-                    color: #2d5a43;
+                    color: var(--accent-red);
                     margin-bottom: 1rem;
                 }
                 .page-lead {
                     text-align: center;
                     color: #64748b;
-                    margin-bottom: 3rem;
+                    margin-bottom: 1rem;
                     font-size: 1.1rem;
+                }
+                .contact-email {
+                    text-align: center;
+                    font-size: 1rem;
+                    margin-bottom: 2rem;
+                    color: var(--text-muted);
+                }
+                .contact-email a {
+                    color: var(--accent-red);
+                    text-decoration: none;
+                    font-weight: 600;
+                }
+                .contact-email a:hover {
+                    text-decoration: underline;
                 }
                 .contact-form {
                     display: flex;
@@ -146,7 +163,7 @@ export default function ContactPage() {
                 .form-group input:focus, 
                 .form-group textarea:focus {
                     outline: none;
-                    border-color: #2d5a43;
+                    border-color: var(--accent-red);
                     box-shadow: 0 0 0 3px rgba(45, 90, 67, 0.1);
                 }
                 .submit-btn {
@@ -159,7 +176,7 @@ export default function ContactPage() {
                     padding: 2rem 0;
                 }
                 .success-message h3 {
-                    color: #2d5a43;
+                    color: var(--accent-red);
                     font-size: 1.8rem;
                     margin-bottom: 1rem;
                 }

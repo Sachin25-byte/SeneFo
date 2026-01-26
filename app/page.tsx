@@ -1,9 +1,9 @@
 import Hero from "@/components/Hero";
 import CategoryCards from "@/components/CategoryCards";
 import FeaturedDeals from "@/components/FeaturedDeals";
-import TrustBadges from "@/components/TrustBadges";
 import LatestReviews from "@/components/LatestReviews";
 import LatestArticles from "@/components/LatestArticles";
+import HomeContent from "@/components/HomeContent";
 
 export default function Home() {
   return (
@@ -12,8 +12,8 @@ export default function Home() {
       <CategoryCards />
       <FeaturedDeals />
       <LatestReviews />
-      <TrustBadges />
       <LatestArticles />
+      <HomeContent />
     </>
   );
 }

@@ -61,14 +61,14 @@ export default function AdminLayout({
               onClick={() => setIsSidebarOpen(false)}
             >
               <span className="icon">{item.icon}</span>
-              {item.name}
+              <span>{item.name}</span>
             </Link>
           ))}
         </nav>
         <div className="sidebar-footer">
           <Link href="/" className="nav-item logout">
             <span className="icon">🚪</span>
-            Exit to Site
+            <span>Exit to Site</span>
           </Link>
         </div>
       </aside>
@@ -80,13 +80,14 @@ export default function AdminLayout({
         .admin-container {
           display: flex;
           height: 100vh;
-          background: #f8fafc;
+          background: var(--bg-secondary);
           overflow: hidden;
+          font-family: var(--font-primary);
         }
         .mobile-header {
             display: none;
             padding: 1rem;
-            background: #1a4231;
+            background: var(--bg-dark);
             color: white;
             align-items: center;
             gap: 1rem;
@@ -95,22 +96,22 @@ export default function AdminLayout({
             left: 0;
             width: 100%;
             z-index: 900;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            box-shadow: var(--shadow-md);
         }
 
         .sidebar {
           width: 260px;
           min-width: 260px;
-          background: #1a4231;
+          background: #0f172a; /* Sleek dark blue/gray */
           color: white;
           display: flex;
           flex-direction: column;
-          box-shadow: 4px 0 10px rgba(0,0,0,0.05);
+          box-shadow: var(--shadow-lg);
           height: 100%;
-          z-index: 1001; /* Fixed: Above overlay (999) */
+          z-index: 1001;
           overflow-y: auto;
         }
-        /* ... */
+
         .sidebar-overlay {
             display: none;
             position: fixed;
@@ -118,17 +119,24 @@ export default function AdminLayout({
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.5); /* Dimming effect */
-            backdrop-filter: blur(2px); /* nice blur for background only */
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(2px);
             z-index: 999;
         }
         .sidebar-header {
-          padding: 2rem;
-          border-bottom: 1px solid rgba(255,255,255,0.1);
+          padding: 2.5rem 1.5rem;
+          border-bottom: 1px solid rgba(255,255,255,0.05);
           display: flex;
           justify-content: space-between;
           align-items: center;
           flex-shrink: 0;
+        }
+        .sidebar-header h2 {
+          font-family: var(--font-heading);
+          font-size: 1.5rem;
+          font-weight: 800;
+          letter-spacing: -0.02em;
+          color: white;
         }
         .close-sidebar {
             display: none;
@@ -143,53 +151,54 @@ export default function AdminLayout({
           padding: 1.5rem 1rem;
           display: flex;
           flex-direction: column;
-          gap: 1rem; /* Increased gap */
+          gap: 0.5rem;
           overflow-y: auto;
         }
         .nav-item {
-          display: flex;
-          align-items: center;
-          gap: 1.2rem;
-          padding: 1rem 1.5rem;
-          color: rgba(255,255,255,0.85);
+          display: flex !important;
+          flex-direction: row !important;
+          align-items: center !important;
+          justify-content: flex-start !important;
+          gap: 1.25rem;
+          padding: 0.85rem 1.5rem;
+          color: rgba(255,255,255,0.7);
           text-decoration: none;
-          transition: all 0.3s ease;
-          border-radius: 8px;
+          transition: all var(--transition-smooth);
+          border-radius: var(--border-radius-md);
           width: 100%;
-          font-weight: 500;
-          white-space: nowrap; /* Prevent text wrap */
+          font-weight: 600;
+          font-size: 0.95rem;
+          text-align: left;
         }
-        .nav-item:hover, .nav-item.active {
-          color: #FFD700;
-          background: rgba(255,255,255,0.1);
-          transform: translateX(5px);
-          font-size: 1.05rem;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        .nav-item:hover {
+          color: white;
+          background: rgba(255,255,255,0.05);
+          transform: translateX(4px);
         }
         .nav-item.active {
-           border-left: 4px solid #FFD700;
-           border-right: none;
+          color: white;
+          background: var(--accent-blue);
+          box-shadow: 0 4px 12px rgba(19, 114, 154, 0.4);
         }
         .icon {
-          font-size: 1.2rem;
-          min-width: 24px; /* Fix icon width */
-          text-align: center;
+          font-size: 1.1rem;
+          min-width: 24px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
         .sidebar-footer {
-          padding: 1rem 0;
-          border-top: 1px solid rgba(255,255,255,0.1);
+          padding: 1rem 1rem 2rem;
+          border-top: 1px solid rgba(255,255,255,0.05);
           flex-shrink: 0;
         }
         
-        .sidebar-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 999;
+        .nav-item.logout {
+          color: #fca5a5;
+        }
+        .nav-item.logout:hover {
+          background: rgba(239, 68, 68, 0.1);
+          color: #ef4444;
         }
 
         .main-content {

@@ -1,11 +1,10 @@
 'use client';
 
-import { useState, useEffect, use } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-export default function EditBlogPage({ params }: { params: Promise<{ id: string }> }) {
-    const unwrappedParams = use(params);
-    const { id } = unwrappedParams;
+export default function EditBlogPage({ params }: { params: { id: string } }) {
+    const { id } = params;
     const router = useRouter();
     const [formData, setFormData] = useState({
         title: '',

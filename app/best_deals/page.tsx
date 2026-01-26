@@ -106,67 +106,42 @@ function BestDealsPageContent() {
                 </div>
             </div>
 
-            {/* Trust Section */}
-            <div className="trust-footer">
-                <div className="container">
-                    <div className="badges-grid">
-                        <div className="badge-item">
-                            <div className="badge-gold">
-                                <span className="count">+1</span>
-                                <span className="label">Review Site</span>
-                            </div>
-                            <p>India's Trusted Review Site</p>
-                        </div>
-                        <div className="badge-item">
-                            <div className="badge-gold">
-                                <span className="count">100K+</span>
-                                <span className="label">Happy Users</span>
-                            </div>
-                            <p>Helping 100,000+ Users Choose</p>
-                        </div>
-                        <div className="badge-item">
-                            <div className="badge-gold">
-                                <span className="count">Top</span>
-                                <span className="label">Rated</span>
-                            </div>
-                            <p>Recognized for Best Comparisons</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <style jsx>{`
                 .best-page {
                     min-height: 100vh;
-                    background: #f0f2f5;
-                    font-family: 'Inter', sans-serif;
-                    padding-bottom: 2rem;
+                    background: var(--bg-secondary);
+                    padding-bottom: 4rem;
                 }
                 .breadcrumbs {
-                    padding: 1rem 0;
-                    color: #64748b;
-                    font-size: 0.9rem;
+                    padding: 1.5rem 0;
+                    color: var(--text-dim);
+                    font-size: 0.85rem;
                 }
                 .breadcrumbs a {
-                    color: #64748b;
+                    color: var(--text-dim);
                     text-decoration: none;
+                }
+                .breadcrumbs a:hover {
+                    color: var(--accent-red);
                 }
                 .separator {
                     margin: 0 0.5rem;
+                    opacity: 0.5;
                 }
                 .current {
-                    color: #1a4231;
-                    font-weight: 500;
+                    color: var(--text-main);
+                    font-weight: 600;
                 }
                 .page-header {
                     text-align: center;
-                    margin: 1rem 0 2rem 0;
+                    margin-bottom: 3rem;
                 }
                 .page-header h1 {
-                    font-size: 2rem;
-                    color: #1a4231;
-                    font-weight: 700;
-                    margin-bottom: 1.5rem;
+                    font-size: 2.5rem;
+                    color: var(--text-main);
+                    font-weight: 900;
+                    margin-bottom: 2rem;
+                    letter-spacing: -0.02em;
                 }
                 
                 .search-container {
@@ -176,147 +151,86 @@ function BestDealsPageContent() {
                 }
                 .search-input {
                     width: 100%;
-                    padding: 12px 20px 12px 40px;
-                    border-radius: 6px;
-                    border: 1px solid #e2e8f0;
+                    padding: 1rem 1rem 1rem 3rem;
+                    border-radius: var(--border-radius-md);
+                    border: 1px solid var(--bg-tertiary);
                     font-size: 1rem;
-                    background: white;
+                    background: #FFFFFF;
+                    box-shadow: var(--shadow-sm);
+                    transition: border-color var(--transition-fast);
+                }
+                .search-input:focus {
+                    outline: none;
+                    border-color: var(--accent-red);
                 }
                 .search-icon {
                     position: absolute;
-                    left: 12px;
+                    left: 1rem;
                     top: 50%;
                     transform: translateY(-50%);
-                    color: #94a3b8;
+                    opacity: 0.5;
                 }
 
                 .tabs-container {
                     display: flex;
                     align-items: center;
-                    background: #e9ecef;
-                    padding: 4px;
-                    border-radius: 4px;
-                    max-width: 1200px;
-                    margin: 0 auto 2rem auto;
+                    gap: 0.75rem;
+                    margin: 0 auto 3rem auto;
                     overflow-x: auto;
+                    padding-bottom: 0.5rem;
+                    scrollbar-width: none;
+                }
+                .tabs-container::-webkit-scrollbar {
+                    display: none;
                 }
                 
                 .tab-btn {
-                    padding: 8px 16px;
-                    background: #2d4a3e; 
-                    color: white;
+                    padding: 10px 24px;
+                    background: var(--accent-red);
+                    color: #FFFFFF;
                     border: none;
-                    border-radius: 4px;
-                    font-weight: 600;
-                    display: flex;
-                    align-items: center;
-                    gap: 6px;
+                    border-radius: 6px;
+                    font-weight: 700;
                     cursor: pointer;
-                    margin-right: 1rem;
+                    white-space: nowrap;
+                    box-shadow: var(--accent-shadow);
                 }
 
                 .tab-btn-simple {
-                    background: transparent;
-                    border: none;
-                    padding: 8px 16px;
-                    color: #4b5563;
-                    font-weight: 500;
+                    background: #FFFFFF;
+                    border: 1px solid var(--bg-tertiary);
+                    padding: 10px 24px;
+                    color: var(--text-muted);
+                    font-weight: 600;
                     cursor: pointer;
-                    border-radius: 4px;
-                    transition: all 0.2s;
+                    border-radius: 6px;
+                    white-space: nowrap;
+                    transition: all var(--transition-fast);
                 }
                 .tab-btn-simple:hover {
-                    color: #1a4231;
-                    background: rgba(0,0,0,0.05);
+                    color: var(--accent-red);
+                    border-color: var(--accent-red);
                 }
                 
                 .products-list {
-                    max-width: 1200px;
-                    margin: 0 auto;
                     display: grid;
-                    grid-template-columns: repeat(4, 1fr);
-                    gap: 1.5rem;
+                    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                    gap: 2rem;
                     padding-bottom: 4rem;
-                }
-                @media (max-width: 1024px) {
-                    .products-list {
-                        grid-template-columns: repeat(3, 1fr);
-                    }
-                }
-                @media (max-width: 768px) {
-                    .products-list {
-                        grid-template-columns: repeat(2, 1fr);
-                        max-width: 100%;
-                        padding: 0 1rem 4rem 1rem;
-                    }
-                }
-                @media (max-width: 480px) {
-                    .products-list {
-                        grid-template-columns: 1fr;
-                    }
                 }
                 
                 .no-results {
                     text-align: center;
                     padding: 4rem;
-                    color: #94a3b8;
+                    color: var(--text-dim);
                     font-size: 1.2rem;
+                    background: #FFFFFF;
+                    border-radius: var(--border-radius-lg);
+                    border: 1px dashed var(--bg-tertiary);
                 }
                 
-                .trust-footer {
-                    background: linear-gradient(135deg, #1a4231 0%, #0f2b1d 100%);
-                    padding: 4rem 0 2rem 0;
-                    color: white;
-                    margin-top: auto;
-                    width: 100%;
-                }
-                .badges-grid {
-                    display: flex;
-                    justify-content: center;
-                    gap: 4rem;
-                    margin-bottom: 3rem;
-                    flex-wrap: wrap;
-                }
-                .badge-item {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    text-align: center;
-                    gap: 1rem;
-                }
-                .badge-gold {
-                    width: 100px;
-                    height: 100px;
-                    border: 3px solid #bf9b30;
-                    border-radius: 50%;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    justify-content: center;
-                    color: #bf9b30;
-                    background: rgba(0,0,0,0.3);
-                    box-shadow: 0 0 15px rgba(191, 155, 48, 0.3);
-                }
-                .badge-gold .count {
-                    font-size: 1.5rem;
-                    font-weight: 800;
-                    line-height: 1;
-                }
-                .badge-gold .label {
-                    font-size: 0.7rem;
-                    text-transform: uppercase;
-                    letter-spacing: 1px;
-                }
-                .badge-item p {
-                    font-size: 0.9rem;
-                    opacity: 0.9;
-                    max-width: 150px;
-                }
                 @media (max-width: 768px) {
-                    .page-header h1 { font-size: 1.5rem; }
-                    .tab-btn, .tab-btn-simple { padding: 6px 12px; font-size: 0.9rem; }
-                    .badges-grid { gap: 2rem; }
-                    .tabs-container { justify-content: flex-start; } 
+                    .page-header h1 { font-size: 1.75rem; }
                 }
             `}</style>
         </div>

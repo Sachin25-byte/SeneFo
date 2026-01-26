@@ -40,45 +40,47 @@ export default function DealCard({ deal }: { deal: DealProps }) {
 
       <style jsx>{`
         .deal-card {
-          background: white;
-          border-radius: 16px;
+          background: #FFFFFF;
+          border-radius: var(--border-radius-lg);
           padding: 1.5rem;
           display: flex;
           align-items: center;
           gap: 2rem;
           position: relative;
-          box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+          box-shadow: var(--shadow-sm);
           margin-bottom: 1.5rem;
-          transition: transform 0.2s ease;
-          border: 1px solid #f0f0f0;
+          transition: all var(--transition-smooth);
+          border: 1px solid var(--bg-tertiary);
         }
         .deal-card:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+          transform: translateY(-4px);
+          box-shadow: var(--shadow-xl);
+          border-color: var(--accent-red);
         }
         .badge {
           position: absolute;
           top: 0;
           left: 0;
-          background: #2d5a43;
-          color: white;
+          background: var(--accent-red);
+          color: #FFFFFF;
           padding: 6px 14px;
-          font-weight: 700;
-          font-size: 0.85rem;
-          border-top-left-radius: 16px;
-          border-bottom-right-radius: 16px;
+          font-weight: 800;
+          font-size: 0.75rem;
+          border-top-left-radius: var(--border-radius-lg);
+          border-bottom-right-radius: 8px;
+          box-shadow: var(--shadow-sm);
         }
         .deal-image {
-          width: 140px;
-          height: 140px;
+          width: 120px;
+          height: 120px;
           flex-shrink: 0;
           display: flex;
           align-items: center;
-          justifyContent: center;
+          justify-content: center;
         }
         .deal-image img {
-          max-width: 100%;
-          max-height: 100%;
+          max-width: 90%;
+          max-height: 90%;
           object-fit: contain;
         }
         .deal-content {
@@ -86,8 +88,8 @@ export default function DealCard({ deal }: { deal: DealProps }) {
         }
         .deal-title {
           font-size: 1.25rem;
-          font-weight: 700;
-          color: #1a1a1a;
+          font-weight: 800;
+          color: var(--text-main);
           margin-bottom: 0.5rem;
         }
         .deal-pricing {
@@ -97,13 +99,13 @@ export default function DealCard({ deal }: { deal: DealProps }) {
           margin-bottom: 0.5rem;
         }
         .current-price {
-          font-size: 1.4rem;
+          font-size: 1.5rem;
           font-weight: 800;
-          color: #1a1a1a;
+          color: var(--text-main);
         }
         .original-price {
-          font-size: 1rem;
-          color: #888;
+          font-size: 0.9rem;
+          color: var(--text-dim);
           text-decoration: line-through;
         }
         .deal-rating {
@@ -113,41 +115,41 @@ export default function DealCard({ deal }: { deal: DealProps }) {
           margin-bottom: 0.8rem;
         }
         .stars {
-          color: #fbbf24;
-          font-size: 1.1rem;
+          color: #FFB400;
+          font-size: 1rem;
         }
         .reviews {
-          color: #666;
-          font-size: 0.9rem;
+          color: var(--text-dim);
+          font-size: 0.85rem;
         }
         .category-tag {
           display: inline-flex;
           align-items: center;
           gap: 0.4rem;
-          background: #f0f7f4;
-          color: #2d5a43;
+          background: var(--accent-red-light);
+          color: var(--accent-red);
           padding: 4px 12px;
-          border-radius: 20px;
-          font-size: 0.85rem;
-          font-weight: 600;
-          border: 1px solid #d1e7dd;
+          border-radius: 4px;
+          font-size: 0.75rem;
+          font-weight: 800;
         }
         .amazon-btn {
-          background: #2d5a43;
-          color: white;
+          background: var(--text-main);
+          color: #FFFFFF;
           border: none;
           padding: 12px 24px;
-          border-radius: 8px;
+          border-radius: var(--border-radius-md);
           font-weight: 700;
           cursor: pointer;
           display: flex;
           align-items: center;
           gap: 0.8rem;
-          transition: background 0.2s ease;
+          transition: all var(--transition-fast);
           white-space: nowrap;
         }
         .amazon-btn:hover {
-          background: #1e3d2d;
+          background: var(--accent-red);
+          transform: scale(1.05);
         }
         .arrow {
           font-size: 1.4rem;

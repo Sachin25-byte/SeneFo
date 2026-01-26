@@ -25,12 +25,12 @@ export default function Header() {
             position: 'sticky',
             top: 0,
             zIndex: 1000,
-            background: 'linear-gradient(135deg, rgba(10, 10, 10, 0.98) 0%, rgba(26, 26, 26, 0.95) 100%)',
-            backdropFilter: 'blur(16px)',
-            borderBottom: '1px solid rgba(212, 175, 55, 0.1)',
-            boxShadow: '0 4px 24px rgba(0, 0, 0, 0.7)',
+            background: 'var(--bg-primary)',
+            backdropFilter: 'blur(10px)',
+            borderBottom: '1px solid var(--bg-tertiary)',
+            boxShadow: 'var(--shadow-sm)',
             padding: '0.75rem 0',
-            color: 'var(--soft-white)'
+            color: 'var(--text-main)'
         }}>
             <div className="container" style={{
                 display: 'flex',
@@ -40,12 +40,12 @@ export default function Header() {
             }}>
                 <Link href="/" style={{ zIndex: 1001 }}>
                     <img
-                        src="/logo-gold.png"
+                        src="/logo.png"
                         alt="SeneFo Logo"
                         style={{
-                            height: '90px',
+                            height: '50px',
                             width: 'auto',
-                            objectFit: 'cover'
+                            objectFit: 'contain'
                         }}
                     />
                 </Link>
@@ -54,35 +54,43 @@ export default function Header() {
                 <nav className="desktop-nav">
                     <ul style={{
                         display: 'flex',
-                        gap: '2.5rem',
+                        gap: '2rem',
                         alignItems: 'center',
-                        fontWeight: 500
+                        fontWeight: 600,
+                        listStyle: 'none'
                     }}>
                         <li><Link href="/" className={`nav-link ${isActive('/')}`}>Home</Link></li>
-                        <li><Link href="/best_deals" className={`nav-link ${isActive('/best_deals')}`}>Best Deals</Link></li>
+                        <li><Link href="/best_deals" className={`nav-link ${isActive('/best_deals')}`}>Deals</Link></li>
                         <li><Link href="/reviews" className={`nav-link ${isActive('/reviews')}`}>Reviews</Link></li>
                         <li><Link href="/blog" className={`nav-link ${isActive('/blog')}`}>Blog</Link></li>
-                        <li><Link href="/about" className={`nav-link ${isActive('/about')}`}>About</Link></li>
+                        <li><Link href="/contact" className={`nav-link ${isActive('/contact')}`}>Contact</Link></li>
                         <li>
-                            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                            <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', marginLeft: '1rem' }}>
                                 {/* Instagram */}
-                                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" style={{ display: 'flex' }}>
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M7.8 2H16.2C19.4 2 22 4.6 22 7.8V16.2C22 19.4 19.4 22 16.2 22H7.8C4.6 22 2 19.4 2 16.2V7.8C2 4.6 4.6 2 7.8 2Z" stroke="#FFD700" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                        <path d="M16 11.37C16.1234 12.2022 15.9813 13.0522 15.5938 13.799C15.2063 14.5458 14.5931 15.1514 13.8416 15.5297C13.0901 15.9079 12.2384 16.0396 11.4078 15.9059C10.5771 15.7723 9.80976 15.3801 9.21484 14.7852C8.61991 14.1902 8.22773 13.4229 8.09406 12.5922C7.9604 11.7616 8.09206 10.9099 8.47032 10.1584C8.84858 9.40685 9.45418 8.79374 10.201 8.40624C10.9478 8.01874 11.7978 7.87658 12.63 8C13.5229 8.09117 14.345 8.52846 14.9427 9.22961C15.5404 9.93076 15.8727 10.8447 15.8727 11.8H16V11.37Z" stroke="#FFD700" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                        <path d="M17.5 6.5H17.51" stroke="#FFD700" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="social-icon instagram-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <defs>
+                                            <linearGradient id="instagram-gradient" x1="0%" y1="100%" x2="100%" y2="0%">
+                                                <stop offset="0%" style={{ stopColor: '#FD5949' }} />
+                                                <stop offset="50%" style={{ stopColor: '#D6249F' }} />
+                                                <stop offset="100%" style={{ stopColor: '#285AEB' }} />
+                                            </linearGradient>
+                                        </defs>
+                                        <path d="M7.8 2H16.2C19.4 2 22 4.6 22 7.8V16.2C22 19.4 19.4 22 16.2 22H7.8C4.6 22 2 19.4 2 16.2V7.8C2 4.6 4.6 2 7.8 2Z" stroke="url(#instagram-gradient)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                        <path d="M16 11.37C16.1234 12.2022 15.9813 13.0522 15.5938 13.799C15.2063 14.5458 14.5931 15.1514 13.8416 15.5297C13.0901 15.9079 12.2384 16.0396 11.4078 15.9059C10.5771 15.7723 9.80976 15.3801 9.21484 14.7852C8.61991 14.1902 8.22773 13.4229 8.09406 12.5922C7.9604 11.7616 8.09206 10.9099 8.47032 10.1584C8.84858 9.40685 9.45418 8.79374 10.201 8.40624C10.9478 8.01874 11.7978 7.87658 12.63 8C13.5229 8.09117 14.345 8.52846 14.9427 9.22961C15.5404 9.93076 15.8727 10.8447 15.8727 11.8H16V11.37Z" stroke="url(#instagram-gradient)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                        <circle cx="17.5" cy="6.5" r="0.5" fill="url(#instagram-gradient)" />
                                     </svg>
                                 </a>
                                 {/* Twitter */}
-                                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" style={{ display: 'flex' }}>
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z" stroke="#FFD700" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="social-icon twitter-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932L18.901 1.153zM17.61 20.644h2.039L6.486 3.24H4.298L17.61 20.644z" />
                                     </svg>
                                 </a>
                                 {/* Facebook */}
-                                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" style={{ display: 'flex' }}>
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M18 2H15C13.6739 2 12.4021 2.52678 11.4645 3.46447C10.5268 4.40215 10 5.67392 10 7V10H7V14H10V22H14V14H17L18 10H14V7C14 6.73478 14.1054 6.48043 14.2929 6.29289C14.4804 6.10536 14.7348 6 15 6H18V2Z" stroke="#FFD700" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="social-icon facebook-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" stroke="#1877F2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                     </svg>
                                 </a>
                             </div>
@@ -100,7 +108,7 @@ export default function Header() {
                         background: 'none',
                         border: 'none',
                         fontSize: '1.8rem',
-                        color: 'white',
+                        color: 'var(--text-main)',
                         cursor: 'pointer',
                         zIndex: 1001
                     }}
@@ -116,9 +124,8 @@ export default function Header() {
                         left: 0,
                         width: '100%',
                         height: '100vh',
-                        background: 'linear-gradient(135deg, rgba(10, 10, 10, 0.98) 0%, rgba(26, 26, 26, 0.95) 100%)',
-                        backdropFilter: 'blur(20px)',
-                        color: 'var(--soft-white)',
+                        background: 'var(--bg-primary)',
+                        color: 'var(--text-main)',
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'center',
@@ -126,28 +133,33 @@ export default function Header() {
                         gap: '2rem',
                         zIndex: 1000
                     }}>
-                        <Link href="/" onClick={() => setIsMenuOpen(false)} style={{ fontSize: '1.5rem', fontWeight: 600 }}>Home</Link>
-                        <Link href="/best_deals" onClick={() => setIsMenuOpen(false)} style={{ fontSize: '1.5rem', fontWeight: 600 }}>Best Deals</Link>
-                        <Link href="/reviews" onClick={() => setIsMenuOpen(false)} style={{ fontSize: '1.5rem', fontWeight: 600 }}>Reviews</Link>
-                        <Link href="/blog" onClick={() => setIsMenuOpen(false)} style={{ fontSize: '1.5rem', fontWeight: 600 }}>Blog</Link>
-                        <Link href="/about" onClick={() => setIsMenuOpen(false)} style={{ fontSize: '1.5rem', fontWeight: 600 }}>About</Link>
-                        <Link href="/contact" onClick={() => setIsMenuOpen(false)} style={{ fontSize: '1.5rem', fontWeight: 600 }}>Contact</Link>
+                        <Link href="/" onClick={() => setIsMenuOpen(false)} style={{ fontSize: '1.5rem', fontWeight: 700 }}>Home</Link>
+                        <Link href="/best_deals" onClick={() => setIsMenuOpen(false)} style={{ fontSize: '1.5rem', fontWeight: 700 }}>Best Deals</Link>
+                        <Link href="/reviews" onClick={() => setIsMenuOpen(false)} style={{ fontSize: '1.5rem', fontWeight: 700 }}>Reviews</Link>
+                        <Link href="/blog" onClick={() => setIsMenuOpen(false)} style={{ fontSize: '1.5rem', fontWeight: 700 }}>Blog</Link>
+                        <Link href="/contact" onClick={() => setIsMenuOpen(false)} style={{ fontSize: '1.5rem', fontWeight: 700 }}>Contact</Link>
                         <div style={{ display: 'flex', gap: '2rem', marginTop: '1rem' }}>
                             <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
-                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M7.8 2H16.2C19.4 2 22 4.6 22 7.8V16.2C22 19.4 19.4 22 16.2 22H7.8C4.6 22 2 19.4 2 16.2V7.8C2 4.6 4.6 2 7.8 2Z" stroke="#FFD700" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                    <path d="M16 11.37C16.1234 12.2022 15.9813 13.0522 15.5938 13.799C15.2063 14.5458 14.5931 15.1514 13.8416 15.5297C13.0901 15.9079 12.2384 16.0396 11.4078 15.9059C10.5771 15.7723 9.80976 15.3801 9.21484 14.7852C8.61991 14.1902 8.22773 13.4229 8.09406 12.5922C7.9604 11.7616 8.09206 10.9099 8.47032 10.1584C8.84858 9.40685 9.45418 8.79374 10.201 8.40624C10.9478 8.01874 11.7978 7.87658 12.63 8C13.5229 8.09117 14.345 8.52846 14.9427 9.22961C15.5404 9.93076 15.8727 10.8447 15.8727 11.8H16V11.37Z" stroke="#FFD700" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                    <path d="M17.5 6.5H17.51" stroke="#FFD700" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <defs>
+                                        <linearGradient id="instagram-gradient-mobile" x1="0%" y1="100%" x2="100%" y2="0%">
+                                            <stop offset="0%" style={{ stopColor: '#FD5949' }} />
+                                            <stop offset="50%" style={{ stopColor: '#D6249F' }} />
+                                            <stop offset="100%" style={{ stopColor: '#285AEB' }} />
+                                        </linearGradient>
+                                    </defs>
+                                    <path d="M7.8 2H16.2C19.4 2 22 4.6 22 7.8V16.2C22 19.4 19.4 22 16.2 22H7.8C4.6 22 2 19.4 2 16.2V7.8C2 4.6 4.6 2 7.8 2Z" stroke="url(#instagram-gradient-mobile)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                    <path d="M16 11.37C16.1234 12.2022 15.9813 13.0522 15.5938 13.799C15.2063 14.5458 14.5931 15.1514 13.8416 15.5297C13.0901 15.9079 12.2384 16.0396 11.4078 15.9059C10.5771 15.7723 9.80976 15.3801 9.21484 14.7852C8.61991 14.1902 8.22773 13.4229 8.09406 12.5922C7.9604 11.7616 8.09206 10.9099 8.47032 10.1584C8.84858 9.40685 9.45418 8.79374 10.201 8.40624C10.9478 8.01874 11.7978 7.87658 12.63 8C13.5229 8.09117 14.345 8.52846 14.9427 9.22961C15.5404 9.93076 15.8727 10.8447 15.8727 11.8H16V11.37Z" stroke="url(#instagram-gradient-mobile)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
                             </a>
                             <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
-                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z" stroke="#FFD700" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932L18.901 1.153zM17.61 20.644h2.039L6.486 3.24H4.298L17.61 20.644z" />
                                 </svg>
                             </a>
                             <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
-                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M18 2H15C13.6739 2 12.4021 2.52678 11.4645 3.46447C10.5268 4.40215 10 5.67392 10 7V10H7V14H10V22H14V14H17L18 10H14V7C14 6.73478 14.1054 6.48043 14.2929 6.29289C14.4804 6.10536 14.7348 6 15 6H18V2Z" stroke="#FFD700" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" stroke="#1877F2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
                             </a>
                         </div>
@@ -156,6 +168,30 @@ export default function Header() {
             </div>
 
             <style jsx>{`
+        .nav-link {
+          color: var(--text-muted);
+          transition: var(--transition-fast);
+          position: relative;
+        }
+        .nav-link:hover {
+          color: var(--accent-red);
+        }
+        .nav-link.active {
+          color: var(--accent-red);
+        }
+        .nav-link::after {
+          content: '';
+          position: absolute;
+          bottom: -4px;
+          left: 0;
+          width: 0;
+          height: 2px;
+          background: var(--accent-red);
+          transition: width var(--transition-fast);
+        }
+        .nav-link:hover::after, .nav-link.active::after {
+          width: 100%;
+        }
         @media (max-width: 768px) {
           .desktop-nav {
             display: none;

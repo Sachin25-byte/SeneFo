@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation';
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
+import AffiliateDisclosure from "@/components/AffiliateDisclosure";
 
 export default function LayoutWrapper({
     children,
@@ -20,6 +21,7 @@ export default function LayoutWrapper({
     return (
         <>
             <Header />
+            <AffiliateDisclosure />
             <main>{children}</main>
             <Footer />
             <ScrollToTop />

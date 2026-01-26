@@ -48,40 +48,13 @@ export default function CategoryCards() {
       </div>
       <style jsx>{`
         .categories {
-          padding: clamp(2rem, 6vw, 3rem) 0;
-          background: var(--midnight-black);
-          position: relative;
-        }
-        
-        .categories::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.03) 0%, transparent 70%);
-          pointer-events: none;
-        }
-        
-        .container {
-          position: relative;
-          z-index: 2;
+          padding: 3rem 0;
+          background: var(--bg-primary);
         }
         
         .section-title {
           text-align: center;
-          font-size: clamp(2rem, 5vw, 2.8rem);
-          font-weight: 800;
-          margin-bottom: 3rem;
-          color: var(--soft-white);
-        }
-        
-        .section-title span {
-          background: var(--gold-gradient);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
+          margin-bottom: 2.5rem;
         }
         
         .grid {
@@ -91,56 +64,31 @@ export default function CategoryCards() {
         }
         
         .category-card {
-          background: var(--card-gradient);
-          border: 1px solid rgba(212, 175, 55, 0.15);
+          background: #000;
           border-radius: var(--border-radius-lg);
           overflow: hidden;
-          cursor: pointer;
           position: relative;
-          height: 400px;
-          transition: all var(--transition-smooth);
-        }
-        
-        .category-card::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          height: 3px;
-          background: var(--gold-gradient);
-          opacity: 0;
-          transition: opacity var(--transition-smooth);
-          z-index: 3;
+          height: 380px;
+          transition: var(--transition-smooth);
+          box-shadow: var(--shadow-md);
         }
         
         .category-card:hover {
           transform: translateY(-10px);
           box-shadow: var(--shadow-xl);
-          border-color: var(--royal-gold);
-        }
-        
-        .category-card:hover::before {
-          opacity: 1;
         }
         
         .card-overlay {
           position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: linear-gradient(180deg, transparent 0%, rgba(10, 10, 10, 0.8) 100%);
+          inset: 0;
+          background: linear-gradient(180deg, transparent 40%, rgba(0, 0, 0, 0.9) 100%);
           z-index: 2;
           transition: opacity var(--transition-smooth);
         }
         
         .card-image {
-          height: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          position: relative;
+          position: absolute;
+          inset: 0;
           z-index: 1;
         }
         
@@ -148,53 +96,54 @@ export default function CategoryCards() {
           width: 100%;
           height: 100%;
           object-fit: cover;
-          transition: transform var(--transition-smooth);
+          transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         .category-card:hover .card-image img {
-          transform: scale(1.08);
+          transform: scale(1.1);
         }
         
         .card-label {
           position: absolute;
-          bottom: 0;
-          width: 100%;
-          padding: 1.75rem 1.5rem;
+          bottom: 2rem;
+          left: 2rem;
+          right: 2rem;
           z-index: 3;
           display: flex;
           justify-content: space-between;
           align-items: center;
-          background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(255, 215, 0, 0.1) 100%);
-          backdrop-filter: blur(10px);
-          border-top: 1px solid rgba(212, 175, 55, 0.3);
         }
         
         .label-text {
-          color: var(--soft-white);
-          font-weight: 700;
-          font-size: 1.3rem;
-          letter-spacing: 0.02em;
-          text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+          color: #FFFFFF;
+          font-weight: 800;
+          font-size: 1.5rem;
+          letter-spacing: -0.02em;
         }
         
         .arrow-icon {
-          color: var(--royal-gold);
-          transition: transform var(--transition-smooth);
-          filter: drop-shadow(0 2px 4px rgba(212, 175, 55, 0.6));
+          color: #FFFFFF;
+          background: var(--accent-red);
+          border-radius: 50%;
+          padding: 8px;
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: var(--transition-smooth);
         }
         
         .category-card:hover .arrow-icon {
-          transform: translateX(5px);
+          transform: translateX(5px) rotate(-45deg);
         }
         
         @media (max-width: 768px) {
+          .categories {
+            padding: 3rem 0;
+          }
           .grid {
             grid-template-columns: 1fr;
-            gap: 1.5rem;
-          }
-          
-          .category-card {
-            height: 350px;
           }
         }
       `}</style>

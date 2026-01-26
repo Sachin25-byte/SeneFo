@@ -19,7 +19,7 @@ export default function SettingsPage() {
     const [brandingData, setBrandingData] = useState({
         siteName: 'SENEFO',
         tagline: 'Smart Shopping Starts Here',
-        logoUrl: '/logo-gold.png',
+        logoUrl: '/logo.png',
         primaryColor: '#D4AF37',
         secondaryColor: '#0a0a0a'
     });
@@ -184,7 +184,7 @@ export default function SettingsPage() {
                                     type="text"
                                     value={brandingData.logoUrl}
                                     onChange={(e) => setBrandingData({ ...brandingData, logoUrl: e.target.value })}
-                                    placeholder="/logo-gold.png"
+                                    placeholder="/logo.png"
                                 />
                                 {brandingData.logoUrl && (
                                     <div className="logo-preview">

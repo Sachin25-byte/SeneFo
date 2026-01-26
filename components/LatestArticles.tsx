@@ -63,49 +63,39 @@ export default function LatestArticles() {
 
             <style jsx>{`
                 .latest-articles {
-                    padding: clamp(4rem, 10vw, 6rem) 0;
-                    background: radial-gradient(ellipse at bottom, rgba(212, 175, 55, 0.02) 0%, var(--midnight-black) 70%);
+                    padding: 3rem 0;
+                    background: var(--bg-secondary);
                 }
                 
                 .header-section {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    margin-bottom: 3rem;
+                    margin-bottom: 2rem;
                     flex-wrap: wrap;
                     gap: 1.5rem;
                 }
                 
-                .section-title {
-                    margin: 0;
-                    font-size: clamp(2rem, 5vw, 2.8rem);
-                    font-weight: 800;
-                    color: var(--soft-white);
-                }
-                
                 .section-title span {
-                    background: var(--gold-gradient);
-                    -webkit-background-clip: text;
-                    -webkit-text-fill-color: transparent;
-                    background-clip: text;
+                    color: var(--accent-red);
                 }
                 
                 .view-all-link {
                     display: inline-flex;
                     align-items: center;
                     gap: 0.5rem;
-                    color: var(--royal-gold);
+                    color: var(--text-main);
                     font-weight: 700;
-                    font-size: 1.05rem;
+                    font-size: 0.95rem;
                     transition: all var(--transition-fast);
-                    padding: 0.75rem 1.5rem;
-                    border: 2px solid var(--royal-gold);
+                    padding: 10px 20px;
+                    border: 1px solid var(--text-main);
                     border-radius: var(--border-radius-md);
                 }
                 
                 .view-all-link:hover {
-                    background: var(--royal-gold);
-                    color: var(--midnight-black);
+                    background: var(--text-main);
+                    color: #FFFFFF;
                     transform: translateX(5px);
                 }
                 
@@ -116,36 +106,21 @@ export default function LatestArticles() {
                 }
                 
                 .article-card {
-                    background: var(--card-gradient);
-                    border: 1px solid rgba(212, 175, 55, 0.15);
+                    background: #FFFFFF;
+                    border: 1px solid var(--bg-tertiary);
                     border-radius: var(--border-radius-lg);
                     overflow: hidden;
                     transition: all var(--transition-smooth);
                     display: block;
                     text-decoration: none;
                     color: inherit;
-                }
-                
-                .article-card::before {
-                    content: '';
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    right: 0;
-                    height: 3px;
-                    background: var(--gold-gradient);
-                    opacity: 0;
-                    transition: opacity var(--transition-smooth);
+                    box-shadow: var(--shadow-sm);
                 }
                 
                 .article-card:hover {
                     transform: translateY(-8px);
                     box-shadow: var(--shadow-xl);
-                    border-color: var(--royal-gold);
-                }
-                
-                .article-card:hover::before {
-                    opacity: 1;
+                    border-color: var(--accent-red);
                 }
                 
                 .card-image {
@@ -167,11 +142,8 @@ export default function LatestArticles() {
                 
                 .image-overlay {
                     position: absolute;
-                    top: 0;
-                    left: 0;
-                    right: 0;
-                    bottom: 0;
-                    background: linear-gradient(180deg, transparent 0%, rgba(10, 10, 10, 0.7) 100%);
+                    inset: 0;
+                    background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.4) 100%);
                 }
                 
                 .card-content {
@@ -180,21 +152,22 @@ export default function LatestArticles() {
                 
                 .blog-badge {
                     display: inline-block;
-                    padding: 0.4rem 0.9rem;
-                    background: rgba(212, 175, 55, 0.15);
-                    border: 1px solid rgba(212, 175, 55, 0.3);
-                    border-radius: var(--border-radius-sm);
-                    color: var(--royal-gold);
-                    font-size: 0.85rem;
-                    font-weight: 600;
+                    padding: 0.25rem 0.75rem;
+                    background: var(--accent-red-light);
+                    border-radius: 4px;
+                    color: var(--accent-red);
+                    font-size: 0.75rem;
+                    font-weight: 800;
                     margin-bottom: 1rem;
+                    text-transform: uppercase;
+                    letter-spacing: 0.05em;
                 }
                 
                 .card-content h3 {
-                    font-size: 1.3rem;
-                    font-weight: 700;
+                    font-size: 1.25rem;
+                    font-weight: 800;
                     margin-bottom: 0.75rem;
-                    color: var(--soft-white);
+                    color: var(--text-main);
                     line-height: 1.4;
                     display: -webkit-box;
                     -webkit-line-clamp: 2;
@@ -204,11 +177,11 @@ export default function LatestArticles() {
                 
                 .excerpt {
                     font-size: 0.95rem;
-                    color: var(--light-gray);
+                    color: var(--text-muted);
                     margin-bottom: 1.5rem;
-                    line-height: 1.7;
+                    line-height: 1.6;
                     display: -webkit-box;
-                    -webkit-line-clamp: 3;
+                    -webkit-line-clamp: 2;
                     -webkit-box-orient: vertical;
                     overflow: hidden;
                 }
@@ -218,40 +191,23 @@ export default function LatestArticles() {
                     align-items: center;
                     gap: 0.5rem;
                     background: transparent;
-                    color: var(--royal-gold);
-                    border: 2px solid var(--royal-gold);
-                    padding: 0.65rem 1.25rem;
-                    border-radius: var(--border-radius-md);
+                    color: var(--accent-red);
+                    border: none;
+                    padding: 0;
                     font-weight: 700;
-                    font-size: 0.95rem;
+                    font-size: 0.9rem;
                     cursor: pointer;
-                    transition: all var(--transition-smooth);
+                    transition: all var(--transition-fast);
                 }
                 
-                .article-card:hover .read-more-btn {
-                    background: var(--royal-gold);
-                    color: var(--midnight-black);
-                }
-                
-                .read-more-btn svg {
-                    transition: transform var(--transition-fast);
-                }
-                
-                .article-card:hover .read-more-btn svg {
-                    transform: translateX(3px);
+                .read-more-btn:hover {
+                    gap: 0.75rem;
                 }
                 
                 @media (max-width: 768px) {
-                    .header-section {
-                        flex-direction: column;
-                        align-items: flex-start;
+                    .latest-articles {
+                        padding: 3rem 0;
                     }
-                    
-                    .view-all-link {
-                        width: 100%;
-                        justify-content: center;
-                    }
-                    
                     .articles-grid {
                         grid-template-columns: 1fr;
                     }
