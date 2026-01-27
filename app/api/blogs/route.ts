@@ -28,18 +28,28 @@ export async function POST(request: Request) {
             delete body.id;
         }
 
+        // Add default fields if missing and ensure types
+        const blogData = {
+            ...body,
+            rating: body.rating ? Number(body.rating) : 5,
+            author: body.author || 'Admin',
+            date: body.date || new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+        };
+
         const { data, error } = await supabase
             .from('blogs')
-            .insert([body])
+            .insert([blogData])
             .select()
             .single();
 
         if (error) {
+            console.error('Supabase Blog Error:', error);
             return NextResponse.json({ error: error.message }, { status: 500 });
         }
 
         return NextResponse.json(data, { status: 201 });
     } catch (error: any) {
+        console.error('Server Blog Error:', error);
         return NextResponse.json({ error: 'Failed to create blog' }, { status: 500 });
     }
 }
