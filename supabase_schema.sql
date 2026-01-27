@@ -1,83 +1,69 @@
--- Create Products table
+-- 1. पुरानी टेबल्स को पूरी तरह साफ़ करें
+DROP TABLE IF EXISTS products CASCADE;
+DROP TABLE IF EXISTS reviews CASCADE;
+DROP TABLE IF EXISTS blogs CASCADE;
+DROP TABLE IF EXISTS categories CASCADE;
+
+-- 2. UUID एक्सटेंशन इनेबल करें
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- 3. PRODUCTS टेबल
 CREATE TABLE products (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   title TEXT NOT NULL,
   image TEXT,
   images TEXT[] DEFAULT '{}',
   video TEXT,
-  originalPrice TEXT,
-  discountedPrice TEXT,
+  original_price TEXT,
+  discounted_price TEXT,
   rating FLOAT DEFAULT 5,
-  reviewsCount INTEGER DEFAULT 0,
+  reviews_count INTEGER DEFAULT 0,
   discount TEXT,
   category TEXT,
   link TEXT DEFAULT '#',
   created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
--- Create Reviews table
+-- 4. REVIEWS टेबल
 CREATE TABLE reviews (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   title TEXT NOT NULL,
   image TEXT,
   images TEXT[] DEFAULT '{}',
   video TEXT,
   rating FLOAT DEFAULT 5,
-  reviewsCount INTEGER DEFAULT 0,
-  totalComments INTEGER DEFAULT 0,
+  reviews_count INTEGER DEFAULT 0,
+  total_comments INTEGER DEFAULT 0,
   excerpt TEXT,
   category TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
--- Create Blogs table
+-- 5. BLOGS TABLE
 CREATE TABLE blogs (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   title TEXT NOT NULL,
   image TEXT,
   images TEXT[] DEFAULT '{}',
   video TEXT,
   excerpt TEXT,
   category TEXT,
-  rating FLOAT DEFAULT 5,
+  author TEXT DEFAULT 'Admin',
   date TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
--- Create Categories table
+-- 6. CATEGORIES TABLE
 CREATE TABLE categories (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name TEXT NOT NULL,
   image TEXT,
-  images TEXT[] DEFAULT '{}',
-  video TEXT,
   link TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
--- Enable RLS (Row Level Security) - For now, we allow public read/write as this is a simple admin site
--- In a real app, you would restrict write access to authenticated users only.
-ALTER TABLE products ENABLE ROW LEVEL SECURITY;
-ALTER TABLE reviews ENABLE ROW LEVEL SECURITY;
-ALTER TABLE blogs ENABLE ROW LEVEL SECURITY;
-ALTER TABLE categories ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Allow public read" ON products FOR SELECT USING (true);
-CREATE POLICY "Allow public insert" ON products FOR INSERT WITH CHECK (true);
-CREATE POLICY "Allow public update" ON products FOR UPDATE USING (true);
-CREATE POLICY "Allow public delete" ON products FOR DELETE USING (true);
-
-CREATE POLICY "Allow public read" ON reviews FOR SELECT USING (true);
-CREATE POLICY "Allow public insert" ON reviews FOR INSERT WITH CHECK (true);
-CREATE POLICY "Allow public update" ON reviews FOR UPDATE USING (true);
-CREATE POLICY "Allow public delete" ON reviews FOR DELETE USING (true);
-
-CREATE POLICY "Allow public read" ON blogs FOR SELECT USING (true);
-CREATE POLICY "Allow public insert" ON blogs FOR INSERT WITH CHECK (true);
-CREATE POLICY "Allow public update" ON blogs FOR UPDATE USING (true);
-CREATE POLICY "Allow public delete" ON blogs FOR DELETE USING (true);
-
-CREATE POLICY "Allow public read" ON categories FOR SELECT USING (true);
-CREATE POLICY "Allow public insert" ON categories FOR INSERT WITH CHECK (true);
-CREATE POLICY "Allow public update" ON categories FOR UPDATE USING (true);
-CREATE POLICY "Allow public delete" ON categories FOR DELETE USING (true);
+-- 7. सभी टेबल्स पर सिक्योरिटी (RLS) बंद करें
+ALTER TABLE products DISABLE ROW LEVEL SECURITY;
+ALTER TABLE reviews DISABLE ROW LEVEL SECURITY;
+ALTER TABLE blogs DISABLE ROW LEVEL SECURITY;
+ALTER TABLE categories DISABLE ROW LEVEL SECURITY;

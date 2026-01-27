@@ -23,6 +23,11 @@ export async function POST(request: Request) {
         const supabase = getSupabase();
         const body = await request.json();
 
+        // Clean ID if needed
+        if (body.id && String(body.id).length < 10) {
+            delete body.id;
+        }
+
         const { data, error } = await supabase
             .from('categories')
             .insert([body])
@@ -35,6 +40,6 @@ export async function POST(request: Request) {
 
         return NextResponse.json(data, { status: 201 });
     } catch (error: any) {
-        return NextResponse.json({ error: error.message }, { status: 500 });
+        return NextResponse.json({ error: 'Failed to create category' }, { status: 500 });
     }
 }
