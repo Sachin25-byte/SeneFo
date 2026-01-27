@@ -26,7 +26,7 @@ export default function DealsPage() {
       .catch(err => console.error('Error fetching deals:', err));
   }, []);
 
-  const categories = ['All Deals', 'Earbuds', 'Power Banks', 'Charging Cables', 'Speakers', 'Accessories'];
+  const categories = ['All Deals', 'Earbuds', 'Power Banks', 'Charging Cables', 'Speakers'];
 
   const filteredDeals = deals.filter(deal => {
     const matchesCategory = activeCategory === 'All Deals' || deal.category === activeCategory;

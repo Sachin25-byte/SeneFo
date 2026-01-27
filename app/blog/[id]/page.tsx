@@ -37,8 +37,43 @@ export default function BlogDetailPage() {
                         </div>
                     </div>
 
-                    <div className="post-image">
-                        <img src={article.image} alt={article.title} />
+                    <div className="post-media">
+                        {/* Main Image or Gallery */}
+                        {article.images && article.images.length > 0 ? (
+                            <div className="gallery-container">
+                                <div className="main-media">
+                                    <img src={article.images[0]} alt={article.title} />
+                                </div>
+                                <div className="thumbnails">
+                                    {article.images.map((img: string, i: number) => (
+                                        <img key={i} src={img} alt={`View ${i + 1}`} />
+                                    ))}
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="post-image">
+                                <img src={article.image} alt={article.title} />
+                            </div>
+                        )}
+
+                        {/* Video Player */}
+                        {article.video && (
+                            <div className="video-container">
+                                {article.video.includes('youtube.com') || article.video.includes('youtu.be') ? (
+                                    <iframe
+                                        width="100%"
+                                        height="450"
+                                        src={`https://www.youtube.com/embed/${article.video.split('v=')[1] || article.video.split('/').pop()}`}
+                                        title="Product Video"
+                                        frameBorder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                    ></iframe>
+                                ) : (
+                                    <video src={article.video} controls width="100%" className="direct-video" />
+                                )}
+                            </div>
+                        )}
                     </div>
 
                     <div className="post-content">
@@ -101,6 +136,55 @@ export default function BlogDetailPage() {
                 }
                 .stars {
                     color: #fbbf24;
+                }
+                .post-media {
+                    margin-bottom: 3rem;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 2rem;
+                }
+                .gallery-container {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 1rem;
+                }
+                .main-media {
+                    border-radius: 12px;
+                    overflow: hidden;
+                    background: #f7f7f7;
+                    height: 500px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                .main-media img {
+                    max-width: 100%;
+                    max-height: 100%;
+                    object-fit: contain;
+                }
+                .thumbnails {
+                    display: flex;
+                    gap: 10px;
+                    overflow-x: auto;
+                    padding-bottom: 5px;
+                }
+                .thumbnails img {
+                    width: 80px;
+                    height: 80px;
+                    object-fit: cover;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    border: 2px solid transparent;
+                    transition: border-color 0.2s;
+                }
+                .thumbnails img:hover {
+                    border-color: #2d5a43;
+                }
+                .video-container {
+                    border-radius: 12px;
+                    overflow: hidden;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+                    background: #000;
                 }
                 .post-image {
                     margin-bottom: 2.5rem;

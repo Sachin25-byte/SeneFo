@@ -33,7 +33,10 @@ export default function ReviewsPage() {
 
     return (
         <div className="admin-page">
-            <h1 className="page-title">Manage Reviews</h1>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem' }}>
+                <h1 className="page-title" style={{ marginBottom: 0 }}>Manage Reviews</h1>
+                <button className="add-btn" onClick={() => window.location.href = '/admin/reviews/add'}>+ New Review</button>
+            </div>
             <div className="table-container">
                 <table className="admin-table">
                     <thead>
@@ -51,7 +54,10 @@ export default function ReviewsPage() {
                                 <td data-label="Rating">{review.rating} ⭐</td>
                                 <td data-label="Comments">{review.totalComments}</td>
                                 <td data-label="Actions">
-                                    <button className="del-btn" onClick={() => handleDelete(review.id)}>Delete</button>
+                                    <div style={{ display: 'flex', gap: '8px' }}>
+                                        <button className="edit-btn" onClick={() => window.location.href = `/admin/reviews/edit/${review.id}`}>Edit</button>
+                                        <button className="del-btn" onClick={() => handleDelete(review.id)}>Delete</button>
+                                    </div>
                                 </td>
                             </tr>
                         ))}
@@ -98,6 +104,35 @@ export default function ReviewsPage() {
                     font-size: 0.9rem;
                     text-transform: uppercase;
                     letter-spacing: 0.05em;
+                }
+                .add-btn {
+                    background: var(--accent-blue);
+                    color: white;
+                    border: none;
+                    padding: 10px 24px;
+                    border-radius: var(--border-radius-md);
+                    cursor: pointer;
+                    font-weight: 700;
+                    box-shadow: 0 4px 12px rgba(19, 114, 154, 0.2);
+                    transition: all var(--transition-fast);
+                }
+                .add-btn:hover {
+                    background: var(--accent-blue-hover);
+                    transform: translateY(-2px);
+                }
+                .edit-btn {
+                    background: #e0f2fe;
+                    color: #0369a1;
+                    border: none;
+                    padding: 8px 16px;
+                    border-radius: var(--border-radius-sm);
+                    cursor: pointer;
+                    font-weight: 600;
+                    font-size: 0.85rem;
+                    transition: all var(--transition-fast);
+                }
+                .edit-btn:hover {
+                    background: #bae6fd;
                 }
                 .del-btn {
                     background: #fee2e2;

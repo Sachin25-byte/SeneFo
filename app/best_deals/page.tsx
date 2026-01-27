@@ -13,7 +13,7 @@ function BestDealsPageContent() {
     const [activeTab, setActiveTab] = useState(initialTab);
     const [products, setProducts] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
-    const [categories, setCategories] = useState<string[]>(['Earbuds', 'Power Banks', 'Accessories']);
+    const [categories, setCategories] = useState<string[]>(['Earbuds', 'Power Banks']);
 
     useEffect(() => {
         fetch('/api/products')

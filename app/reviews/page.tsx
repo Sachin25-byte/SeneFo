@@ -15,13 +15,12 @@ export default function ReviewsPage() {
       .catch(err => console.error('Error fetching reviews:', err));
   }, []);
 
-  const categories = ['All Reviews', 'Earbuds', 'Power Banks', 'Accessories'];
+  const categories = ['All Reviews', 'Earbuds', 'Power Banks'];
 
   const filteredReviews = reviews.filter((review: any) => {
     const matchesCategory = activeCategory === 'All Reviews' ||
       (activeCategory === 'Earbuds' && review.category === 'Earbuds') ||
-      (activeCategory === 'Power Banks' && review.category === 'Power Banks') ||
-      (activeCategory === 'Accessories' && (review.category === 'Accessories' || review.category === 'Cables' || review.category === 'Speakers'));
+      (activeCategory === 'Power Banks' && review.category === 'Power Banks');
     const matchesSearch = review.title.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });

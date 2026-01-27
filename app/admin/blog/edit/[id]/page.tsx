@@ -9,6 +9,8 @@ export default function EditBlogPage({ params }: { params: { id: string } }) {
     const [formData, setFormData] = useState({
         title: '',
         image: '',
+        images: [] as string[],
+        video: '',
         excerpt: '',
         category: '',
         rating: 5,
@@ -58,7 +60,7 @@ export default function EditBlogPage({ params }: { params: { id: string } }) {
                 </div>
 
                 <div className="form-group">
-                    <label>Image</label>
+                    <label>Featured Image</label>
                     <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                         <input
                             type="file"
@@ -93,7 +95,56 @@ export default function EditBlogPage({ params }: { params: { id: string } }) {
                         placeholder="Image URL or Upload File"
                         style={{ marginTop: '10px' }}
                     />
-                    {formData.image && <img src={formData.image} alt="Preview" style={{ height: '50px', marginTop: '10px' }} />}
+                    {formData.image && <img src={formData.image} alt="Preview" style={{ height: '50px', marginTop: '10px', borderRadius: '4px' }} />}
+                </div>
+
+                <div className="form-group">
+                    <label>Post Images Gallery (Add up to 5 more images)</label>
+                    <div className="image-grid">
+                        {(formData.images || []).map((img, index) => (
+                            <div key={index} className="image-item">
+                                <img src={img} alt={`Slide ${index + 1}`} />
+                                <button type="button" onClick={() => {
+                                    const newImgs = [...(formData.images || [])];
+                                    newImgs.splice(index, 1);
+                                    setFormData({ ...formData, images: newImgs });
+                                }} className="remove-img">×</button>
+                            </div>
+                        ))}
+                        {(formData.images || []).length < 5 && (
+                            <div className="add-image-box">
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={async (e) => {
+                                        const file = e.target.files?.[0];
+                                        if (file) {
+                                            const data = new FormData();
+                                            data.append('file', file);
+                                            try {
+                                                const res = await fetch('/api/upload', {
+                                                    method: 'POST',
+                                                    body: data
+                                                });
+                                                const result = await res.json();
+                                                if (result.url) {
+                                                    setFormData(prev => ({ ...prev, images: [...(prev.images || []), result.url] }));
+                                                }
+                                            } catch (err) {
+                                                console.error('Upload failed', err);
+                                            }
+                                        }
+                                    }}
+                                />
+                                <span>+ Add</span>
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                <div className="form-group">
+                    <label>Video URL (YouTube/Direct Link)</label>
+                    <input name="video" value={formData.video || ''} onChange={handleChange} placeholder="https://..." />
                 </div>
 
                 <div className="row">
@@ -141,6 +192,63 @@ export default function EditBlogPage({ params }: { params: { id: string } }) {
                     margin-bottom: 0.5rem;
                     font-weight: 600;
                     color: #444;
+                }
+                .image-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+                    gap: 10px;
+                    margin-top: 10px;
+                }
+                .image-item {
+                    position: relative;
+                    height: 80px;
+                    border-radius: 8px;
+                    overflow: hidden;
+                    border: 1px solid #ddd;
+                }
+                .image-item img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+                .remove-img {
+                    position: absolute;
+                    top: 2px;
+                    right: 2px;
+                    background: rgba(220, 38, 38, 0.8);
+                    color: white;
+                    border: none;
+                    border-radius: 50%;
+                    width: 20px;
+                    height: 20px;
+                    font-size: 12px;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                .add-image-box {
+                    height: 80px;
+                    border: 2px dashed #ced4da;
+                    border-radius: 8px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    position: relative;
+                    color: #6c757d;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                }
+                .add-image-box:hover {
+                    border-color: #2d5a43;
+                    color: #2d5a43;
+                }
+                .add-image-box input {
+                    position: absolute;
+                    inset: 0;
+                    opacity: 0;
+                    cursor: pointer;
                 }
                 input, textarea {
                     width: 100%;

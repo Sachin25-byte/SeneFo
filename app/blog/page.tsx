@@ -15,7 +15,7 @@ export default function BlogPage() {
       .catch(err => console.error('Error fetching blogs:', err));
   }, []);
 
-  const categories = ['All Reviews', 'Earbuds', 'Power Banks', 'Accessories'];
+  const categories = ['All Reviews', 'Earbuds', 'Power Banks'];
 
   const filteredArticles = articles.filter((article: any) => {
     const matchesCategory = activeCategory === 'All Reviews' || article.category === activeCategory;

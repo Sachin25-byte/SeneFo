@@ -1,15 +1,19 @@
 [
   {
-    "id": "05f43ae6-3839-40b6-834b-f6dc36b79e0c",
-    "title": "B450M ATX Motherboard",
-    "image": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80",
-    "originalPrice": "7,800",
-    "discountedPrice": "6,699",
-    "rating": 4.5,
-    "reviewsCount": 45,
-    "discount": "14% OFF",
-    "category": "Components",
-    "link": "https://www.amazon.in/s?k=b450+motherboard",
-    "isActive": true
+    "id": "aed91f26-a6e1-403b-81d7-db3c65219d7c",
+    "title": "Ambrane Mobile Holding Tabletop Stand (Twistand, White) – Adjustable & Anti-Skid",
+    "image": "/uploads/1769500487363_as.jpg",
+    "images": [
+      "/uploads/1769500492309_asd.jpg",
+      "/uploads/1769500496465_as.jpg"
+    ],
+    "video": "",
+    "originalPrice": "12",
+    "discountedPrice": "12",
+    "rating": 5,
+    "reviewsCount": 0,
+    "discount": "12",
+    "category": "Mobile Accessories",
+    "link": "#"
   }
 ]

@@ -8,6 +8,8 @@ export default function CategoriesPage() {
     const [formData, setFormData] = useState({
         name: '',
         image: '',
+        images: [] as string[],
+        video: '',
         link: ''
     });
 
@@ -67,7 +69,7 @@ export default function CategoriesPage() {
             if (res.ok) {
                 fetchCategories();
                 setShowAddForm(false);
-                setFormData({ name: '', image: '', link: '' });
+                setFormData({ name: '', image: '', images: [], video: '', link: '' });
             } else {
                 alert('Failed to add category');
             }
@@ -119,7 +121,7 @@ export default function CategoriesPage() {
                         </div>
 
                         <div className="form-group">
-                            <label>Image</label>
+                            <label>Featured Category Image</label>
                             <div className="upload-container">
                                 <input
                                     type="file"
@@ -136,6 +138,55 @@ export default function CategoriesPage() {
                                 placeholder="Image URL or Upload File"
                                 className="url-input"
                             />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Additional Category Images (3-5 for gallery)</label>
+                            <div className="image-grid">
+                                {(formData.images || []).map((img, index) => (
+                                    <div key={index} className="image-item">
+                                        <img src={img} alt={`Slide ${index + 1}`} />
+                                        <button type="button" onClick={() => {
+                                            const newImgs = [...(formData.images || [])];
+                                            newImgs.splice(index, 1);
+                                            setFormData({ ...formData, images: newImgs });
+                                        }} className="remove-img">×</button>
+                                    </div>
+                                ))}
+                                {(formData.images || []).length < 5 && (
+                                    <div className="add-image-box">
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={async (e) => {
+                                                const file = e.target.files?.[0];
+                                                if (file) {
+                                                    const data = new FormData();
+                                                    data.append('file', file);
+                                                    try {
+                                                        const res = await fetch('/api/upload', {
+                                                            method: 'POST',
+                                                            body: data
+                                                        });
+                                                        const result = await res.json();
+                                                        if (result.url) {
+                                                            setFormData(prev => ({ ...prev, images: [...(prev.images || []), result.url] }));
+                                                        }
+                                                    } catch (err) {
+                                                        console.error('Upload failed', err);
+                                                    }
+                                                }
+                                            }}
+                                        />
+                                        <span>+ Add</span>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="form-group">
+                            <label>Category Video URL</label>
+                            <input name="video" value={formData.video || ''} onChange={handleChange} placeholder="https://..." />
                         </div>
 
                         <div className="form-group">
@@ -278,6 +329,63 @@ export default function CategoriesPage() {
                     font-size: 0.8rem;
                     display: block;
                     margin-top: 5px;
+                }
+                .image-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+                    gap: 10px;
+                    margin-top: 10px;
+                }
+                .image-item {
+                    position: relative;
+                    height: 80px;
+                    border-radius: 8px;
+                    overflow: hidden;
+                    border: 1px solid var(--bg-tertiary);
+                }
+                .image-item img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+                .remove-img {
+                    position: absolute;
+                    top: 2px;
+                    right: 2px;
+                    background: rgba(220, 38, 38, 0.8);
+                    color: white;
+                    border: none;
+                    border-radius: 50%;
+                    width: 20px;
+                    height: 20px;
+                    font-size: 12px;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                .add-image-box {
+                    height: 80px;
+                    border: 2px dashed var(--bg-tertiary);
+                    border-radius: 8px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    position: relative;
+                    color: var(--text-dim);
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                }
+                .add-image-box:hover {
+                    border-color: var(--accent-blue);
+                    color: var(--accent-blue);
+                }
+                .add-image-box input {
+                    position: absolute;
+                    inset: 0;
+                    opacity: 0;
+                    cursor: pointer;
                 }
                 .submit-btn {
                     width: 100%;

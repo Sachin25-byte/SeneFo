@@ -134,6 +134,55 @@ export default function ReviewDetailPage() {
                     font-weight: 700;
                     color: #1a1a1a;
                 }
+                .post-media {
+                    margin-bottom: 3rem;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 2rem;
+                }
+                .gallery-container {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 1rem;
+                }
+                .main-media {
+                    border-radius: 12px;
+                    overflow: hidden;
+                    background: #f7f7f7;
+                    height: 500px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                .main-media img {
+                    max-width: 100%;
+                    max-height: 100%;
+                    object-fit: contain;
+                }
+                .thumbnails {
+                    display: flex;
+                    gap: 10px;
+                    overflow-x: auto;
+                    padding-bottom: 5px;
+                }
+                .thumbnails img {
+                    width: 80px;
+                    height: 80px;
+                    object-fit: cover;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    border: 2px solid transparent;
+                    transition: border-color 0.2s;
+                }
+                .thumbnails img:hover {
+                    border-color: var(--accent-red);
+                }
+                .video-container {
+                    border-radius: 12px;
+                    overflow: hidden;
+                    box-shadow: var(--shadow-md);
+                    background: #000;
+                }
                 .post-image {
                     margin-bottom: 2.5rem;
                     border-radius: 12px;

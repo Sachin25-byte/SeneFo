@@ -1,20 +1,29 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-export default function AddBlogPage() {
+export default function EditReviewPage({ params }: { params: { id: string } }) {
+    const { id } = params;
     const router = useRouter();
     const [formData, setFormData] = useState({
         title: '',
         image: '',
         images: [] as string[],
         video: '',
-        excerpt: '',
-        category: '',
         rating: 5,
-        date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+        reviewsCount: 0,
+        totalComments: 0,
+        excerpt: '',
+        category: ''
     });
+
+    useEffect(() => {
+        fetch(`/api/reviews/${id}`)
+            .then(res => res.json())
+            .then(data => setFormData(data))
+            .catch(err => console.error('Error fetching review:', err));
+    }, [id]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setFormData({
@@ -26,29 +35,29 @@ export default function AddBlogPage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const res = await fetch('/api/blogs', {
-                method: 'POST',
+            const res = await fetch(`/api/reviews/${id}`, {
+                method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)
             });
 
             if (res.ok) {
-                router.push('/admin/blog');
+                router.push('/admin/reviews');
             } else {
-                alert('Failed to create post');
+                alert('Failed to update review');
             }
         } catch (error) {
-            console.error('Error creating post', error);
+            console.error('Error updating review', error);
         }
     };
 
     return (
-        <div className="add-blog">
-            <h1>Write New Post</h1>
+        <div className="add-review">
+            <h1>Edit Review</h1>
             <form onSubmit={handleSubmit} className="form-container">
                 <div className="form-group">
-                    <label>Post Title</label>
-                    <input name="title" required onChange={handleChange} placeholder="e.g. Top 10 Gadgets" />
+                    <label>Review Title</label>
+                    <input name="title" required value={formData.title} onChange={handleChange} placeholder="e.g. Sony WH-1000XM5 Review" />
                 </div>
 
                 <div className="form-group">
@@ -74,7 +83,6 @@ export default function AddBlogPage() {
                                             }
                                         } catch (err) {
                                             console.error('Upload failed', err);
-                                            alert('Image upload failed');
                                         }
                                     }
                                 }}
@@ -88,22 +96,23 @@ export default function AddBlogPage() {
                             placeholder="Featured Image URL or Upload File"
                         />
                     </div>
+                    {formData.image && <img src={formData.image} alt="Preview" style={{ height: '50px', marginTop: '10px', borderRadius: '4px' }} />}
                 </div>
 
                 <div className="form-group">
-                    <label>Post Images Gallery (Add up to 5 more images)</label>
+                    <label>Review Gallery (Add up to 5 more images)</label>
                     <div className="image-grid">
-                        {formData.images.map((img, index) => (
+                        {(formData.images || []).map((img, index) => (
                             <div key={index} className="image-item">
                                 <img src={img} alt={`Slide ${index + 1}`} />
                                 <button type="button" onClick={() => {
-                                    const newImgs = [...formData.images];
+                                    const newImgs = [...(formData.images || [])];
                                     newImgs.splice(index, 1);
                                     setFormData({ ...formData, images: newImgs });
                                 }} className="remove-img">×</button>
                             </div>
                         ))}
-                        {formData.images.length < 5 && (
+                        {(formData.images || []).length < 5 && (
                             <div className="add-image-box">
                                 <input
                                     type="file"
@@ -120,7 +129,7 @@ export default function AddBlogPage() {
                                                 });
                                                 const result = await res.json();
                                                 if (result.url) {
-                                                    setFormData(prev => ({ ...prev, images: [...prev.images, result.url] }));
+                                                    setFormData(prev => ({ ...prev, images: [...(prev.images || []), result.url] }));
                                                 }
                                             } catch (err) {
                                                 console.error('Upload failed', err);
@@ -135,39 +144,46 @@ export default function AddBlogPage() {
                 </div>
 
                 <div className="form-group">
-                    <label>Video URL (YouTube/Direct Link)</label>
-                    <input name="video" value={formData.video} onChange={handleChange} placeholder="https://..." />
+                    <label>Video Review URL (YouTube/Direct Link)</label>
+                    <input name="video" value={formData.video || ''} onChange={handleChange} placeholder="https://..." />
                 </div>
 
                 <div className="row">
                     <div className="form-group">
                         <label>Category</label>
-                        <input name="category" required onChange={handleChange} placeholder="Guide" />
+                        <input name="category" required value={formData.category} onChange={handleChange} placeholder="Audio" />
+                    </div>
+                    <div className="form-group">
+                        <label>Rating (1-5)</label>
+                        <input name="rating" type="number" step="0.1" max="5" required value={formData.rating} onChange={handleChange} placeholder="4.5" />
                     </div>
                 </div>
 
                 <div className="form-group">
-                    <label>Excerpt / Short Description</label>
-                    <textarea name="excerpt" required onChange={handleChange} rows={4} placeholder="Brief summary..." />
+                    <label>Short Review Summary</label>
+                    <textarea name="excerpt" required value={formData.excerpt} onChange={handleChange} rows={4} placeholder="Brief summary of the review..." />
                 </div>
 
-                <button type="submit" className="submit-btn">Publish Post</button>
+                <button type="submit" className="submit-btn">Update Review</button>
             </form>
 
             <style jsx>{`
-                .add-blog {
+                .add-review {
                     max-width: 600px;
                     margin: 0 auto;
                 }
                 h1 {
                     margin-bottom: 2rem;
-                    color: #1a4231;
+                    color: var(--text-main);
+                    font-family: var(--font-heading);
+                    font-weight: 800;
                 }
                 .form-container {
                     background: white;
-                    padding: 2rem;
-                    border-radius: 12px;
-                    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+                    padding: 2.5rem;
+                    border-radius: var(--border-radius-xl);
+                    box-shadow: var(--shadow-lg);
+                    border: 1px solid var(--bg-tertiary);
                 }
                 .form-group {
                     margin-bottom: 1.5rem;
@@ -182,16 +198,18 @@ export default function AddBlogPage() {
                 label {
                     display: block;
                     margin-bottom: 0.5rem;
-                    font-weight: 600;
-                    color: #444;
+                    font-weight: 700;
+                    color: var(--text-main);
+                    font-size: 0.9rem;
                 }
                 input, textarea {
                     width: 100%;
-                    padding: 10px;
-                    border: 1px solid #ddd;
-                    border-radius: 6px;
+                    padding: 12px;
+                    border: 1px solid var(--bg-tertiary);
+                    border-radius: var(--border-radius-md);
                     font-size: 1rem;
-                    font-family: inherit;
+                    background: var(--bg-secondary);
+                    font-family: var(--font-primary);
                 }
                 .image-upload-wrapper {
                     display: flex;
@@ -209,7 +227,7 @@ export default function AddBlogPage() {
                     height: 80px;
                     border-radius: 8px;
                     overflow: hidden;
-                    border: 1px solid #ddd;
+                    border: 1px solid var(--bg-tertiary);
                 }
                 .image-item img {
                     width: 100%;
@@ -234,20 +252,20 @@ export default function AddBlogPage() {
                 }
                 .add-image-box {
                     height: 80px;
-                    border: 2px dashed #ced4da;
+                    border: 2px dashed var(--bg-tertiary);
                     border-radius: 8px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     position: relative;
-                    color: #6c757d;
+                    color: var(--text-dim);
                     font-weight: 600;
                     cursor: pointer;
                     transition: all 0.2s;
                 }
                 .add-image-box:hover {
-                    border-color: #2d5a43;
-                    color: #2d5a43;
+                    border-color: var(--accent-blue);
+                    color: var(--accent-blue);
                 }
                 .add-image-box input {
                     position: absolute;
@@ -256,29 +274,27 @@ export default function AddBlogPage() {
                     cursor: pointer;
                 }
                 .file-input-box {
-                    background: #f8f9fa;
+                    background: var(--bg-secondary);
                     padding: 12px;
-                    border-radius: 6px;
-                    border: 1px dashed #ced4da;
-                }
-                .file-input-box input[type="file"] {
-                    font-size: 0.9rem;
-                    color: #6c757d;
+                    border-radius: var(--border-radius-md);
+                    border: 1px dashed var(--accent-blue-light);
                 }
                 .submit-btn {
                     width: 100%;
-                    padding: 12px;
-                    background: #2d5a43;
+                    padding: 14px;
+                    background: var(--accent-blue);
                     color: white;
                     border: none;
-                    border-radius: 8px;
-                    font-weight: 700;
+                    border-radius: var(--border-radius-md);
+                    font-weight: 800;
                     font-size: 1rem;
                     cursor: pointer;
                     margin-top: 1rem;
+                    transition: all var(--transition-fast);
+                    box-shadow: 0 4px 12px rgba(19, 114, 154, 0.2);
                 }
                 .submit-btn:hover {
-                    background: #1e3d2d;
+                    background: var(--accent-blue-hover);
                 }
             `}</style>
         </div>
