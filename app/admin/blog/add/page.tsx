@@ -50,41 +50,42 @@ export default function AddBlogPage() {
                 </div>
 
                 <div className="form-group">
-                    <label>Image</label>
-                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                        <input
-                            type="file"
-                            accept="image/*"
-                            onChange={async (e) => {
-                                const file = e.target.files?.[0];
-                                if (file) {
-                                    const data = new FormData();
-                                    data.append('file', file);
-                                    try {
-                                        const res = await fetch('/api/upload', {
-                                            method: 'POST',
-                                            body: data
-                                        });
-                                        const result = await res.json();
-                                        if (result.url) {
-                                            setFormData(prev => ({ ...prev, image: result.url }));
+                    <label>Post Featured Image</label>
+                    <div className="image-upload-wrapper">
+                        <div className="file-input-box">
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={async (e) => {
+                                    const file = e.target.files?.[0];
+                                    if (file) {
+                                        const data = new FormData();
+                                        data.append('file', file);
+                                        try {
+                                            const res = await fetch('/api/upload', {
+                                                method: 'POST',
+                                                body: data
+                                            });
+                                            const result = await res.json();
+                                            if (result.url) {
+                                                setFormData(prev => ({ ...prev, image: result.url }));
+                                            }
+                                        } catch (err) {
+                                            console.error('Upload failed', err);
+                                            alert('Image upload failed');
                                         }
-                                    } catch (err) {
-                                        console.error('Upload failed', err);
-                                        alert('Image upload failed');
                                     }
-                                }
-                            }}
+                                }}
+                            />
+                        </div>
+                        <input
+                            name="image"
+                            required
+                            value={formData.image}
+                            onChange={handleChange}
+                            placeholder="Image URL or Upload File"
                         />
                     </div>
-                    <input
-                        name="image"
-                        required
-                        value={formData.image}
-                        onChange={handleChange}
-                        placeholder="Image URL or Upload File"
-                        style={{ marginTop: '10px' }}
-                    />
                 </div>
 
                 <div className="row">
@@ -140,6 +141,21 @@ export default function AddBlogPage() {
                     border-radius: 6px;
                     font-size: 1rem;
                     font-family: inherit;
+                }
+                .image-upload-wrapper {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 12px;
+                }
+                .file-input-box {
+                    background: #f8f9fa;
+                    padding: 12px;
+                    border-radius: 6px;
+                    border: 1px dashed #ced4da;
+                }
+                .file-input-box input[type="file"] {
+                    font-size: 0.9rem;
+                    color: #6c757d;
                 }
                 .submit-btn {
                     width: 100%;

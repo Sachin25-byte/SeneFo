@@ -179,13 +179,41 @@ export default function SettingsPage() {
                             </div>
 
                             <div className="form-group">
-                                <label>Logo URL</label>
-                                <input
-                                    type="text"
-                                    value={brandingData.logoUrl}
-                                    onChange={(e) => setBrandingData({ ...brandingData, logoUrl: e.target.value })}
-                                    placeholder="/logo.png"
-                                />
+                                <label>Site Logo</label>
+                                <div className="image-upload-wrapper">
+                                    <div className="file-input-box">
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={async (e) => {
+                                                const file = e.target.files?.[0];
+                                                if (file) {
+                                                    const data = new FormData();
+                                                    data.append('file', file);
+                                                    try {
+                                                        const res = await fetch('/api/upload', {
+                                                            method: 'POST',
+                                                            body: data
+                                                        });
+                                                        const result = await res.json();
+                                                        if (result.url) {
+                                                            setBrandingData({ ...brandingData, logoUrl: result.url });
+                                                        }
+                                                    } catch (err) {
+                                                        console.error('Upload failed', err);
+                                                        alert('Logo upload failed');
+                                                    }
+                                                }
+                                            }}
+                                        />
+                                    </div>
+                                    <input
+                                        type="text"
+                                        value={brandingData.logoUrl}
+                                        onChange={(e) => setBrandingData({ ...brandingData, logoUrl: e.target.value })}
+                                        placeholder="Image URL or Upload File"
+                                    />
+                                </div>
                                 {brandingData.logoUrl && (
                                     <div className="logo-preview">
                                         <img src={brandingData.logoUrl} alt="Logo Preview" />
@@ -478,6 +506,24 @@ export default function SettingsPage() {
                     margin-bottom: 0.5rem;
                     font-weight: 600;
                     color: #444;
+                }
+
+                .image-upload-wrapper {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                }
+
+                .file-input-box {
+                    background: #f1f5f9;
+                    padding: 12px;
+                    border-radius: 8px;
+                    border: 1px solid #e2e8f0;
+                }
+
+                .file-input-box input[type="file"] {
+                    font-size: 0.9rem;
+                    color: #64748b;
                 }
 
                 input[type="text"],

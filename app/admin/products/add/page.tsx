@@ -53,41 +53,42 @@ export default function AddProductPage() {
                 </div>
 
                 <div className="form-group">
-                    <label>Image</label>
-                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                        <input
-                            type="file"
-                            accept="image/*"
-                            onChange={async (e) => {
-                                const file = e.target.files?.[0];
-                                if (file) {
-                                    const data = new FormData();
-                                    data.append('file', file);
-                                    try {
-                                        const res = await fetch('/api/upload', {
-                                            method: 'POST',
-                                            body: data
-                                        });
-                                        const result = await res.json();
-                                        if (result.url) {
-                                            setFormData(prev => ({ ...prev, image: result.url }));
+                    <label>Product Image</label>
+                    <div className="image-upload-wrapper">
+                        <div className="file-input-box">
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={async (e) => {
+                                    const file = e.target.files?.[0];
+                                    if (file) {
+                                        const data = new FormData();
+                                        data.append('file', file);
+                                        try {
+                                            const res = await fetch('/api/upload', {
+                                                method: 'POST',
+                                                body: data
+                                            });
+                                            const result = await res.json();
+                                            if (result.url) {
+                                                setFormData(prev => ({ ...prev, image: result.url }));
+                                            }
+                                        } catch (err) {
+                                            console.error('Upload failed', err);
+                                            alert('Image upload failed');
                                         }
-                                    } catch (err) {
-                                        console.error('Upload failed', err);
-                                        alert('Image upload failed');
                                     }
-                                }
-                            }}
+                                }}
+                            />
+                        </div>
+                        <input
+                            name="image"
+                            required
+                            value={formData.image}
+                            onChange={handleChange}
+                            placeholder="Image URL or Upload File"
                         />
                     </div>
-                    <input
-                        name="image"
-                        required
-                        value={formData.image}
-                        onChange={handleChange}
-                        placeholder="Image URL or Upload File"
-                        style={{ marginTop: '10px' }}
-                    />
                 </div>
 
                 <div className="row">
@@ -180,6 +181,21 @@ export default function AddProductPage() {
                     background: var(--bg-secondary);
                     transition: all var(--transition-fast);
                     font-family: var(--font-primary);
+                }
+                .image-upload-wrapper {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 12px;
+                }
+                .file-input-box {
+                    background: var(--bg-secondary);
+                    padding: 12px;
+                    border-radius: var(--border-radius-md);
+                    border: 1px dashed var(--accent-blue-light);
+                }
+                .file-input-box input[type="file"] {
+                    font-size: 0.9rem;
+                    color: var(--text-muted);
                 }
                 input:focus {
                     outline: none;

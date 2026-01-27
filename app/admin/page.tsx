@@ -77,12 +77,26 @@ export default function AdminDashboard() {
 
       <div className="recent-activity">
         <h2>Quick Actions</h2>
-        <div className="actions-grid">
-          <Link href="/admin/products/add" className="action-btn">Add New Product</Link>
-          <Link href="/admin/blog/add" className="action-btn">Write Blog Post</Link>
-          <Link href="/admin/reviews" className="action-btn">Manage Reviews</Link>
+        <div className="actions-box">
+          <div className="actions-grid">
+            <Link href="/admin/products/add" className="action-btn">
+              <span>Add New Product</span>
+            </Link>
+            <Link href="/admin/blog/add" className="action-btn">
+              <span>Write Blog Post</span>
+            </Link>
+            <Link href="/admin/categories" className="action-btn">
+              <span>Manage Categories</span>
+            </Link>
+            <Link href="/admin/reviews" className="action-btn">
+              <span>Manage Reviews</span>
+            </Link>
+          </div>
         </div>
       </div>
+
+
+
 
       <style jsx>{`
         .dashboard {
@@ -154,27 +168,37 @@ export default function AdminDashboard() {
         }
         .actions-grid {
           display: flex;
-          gap: 1rem;
+          gap: 1.5rem;
           flex-wrap: wrap;
+          background: white;
+          padding: 2rem;
+          border-radius: var(--border-radius-xl);
+          border: 1px solid var(--bg-tertiary);
+          box-shadow: var(--shadow-sm);
         }
         .action-btn {
-          padding: 1rem 2rem;
-          background: var(--accent-blue);
+          padding: 0.8rem 2rem;
+          background: linear-gradient(135deg, #7b1fa2 0%, #f06292 100%);
           color: white;
           border: none;
-          border-radius: var(--border-radius-md);
+          border-radius: 24px 4px 24px 4px;
           font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          font-size: 0.85rem;
           cursor: pointer;
-          transition: all var(--transition-fast);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           text-decoration: none;
           display: inline-flex;
           align-items: center;
-          box-shadow: 0 4px 12px rgba(19, 114, 154, 0.2);
+          gap: 12px;
+          box-shadow: 0 4px 15px rgba(123, 31, 162, 0.25);
+          position: relative;
         }
         .action-btn:hover {
-          background: var(--accent-blue-hover);
-          transform: translateY(-2px);
-          box-shadow: 0 6px 16px rgba(19, 114, 154, 0.3);
+          transform: translateY(-3px) scale(1.02);
+          box-shadow: 0 8px 25px rgba(123, 31, 162, 0.4);
+          filter: brightness(1.1);
         }
       `}</style>
     </div>

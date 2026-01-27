@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 export default function AdminLayout({
   children,
@@ -10,7 +10,36 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    // Check authentication
+    const isLoggedIn = localStorage.getItem('admin_logged_in');
+
+    if (isLoggedIn !== 'true' && pathname !== '/admin/login') {
+      router.push('/admin/login');
+    } else {
+      setIsAuthenticated(true);
+    }
+  }, [pathname, router]);
+
+  // If it's the login page, don't show the sidebar layout
+  if (pathname === '/admin/login') {
+    return <>{children}</>;
+  }
+
+  // Handle logout
+  const handleLogout = () => {
+    localStorage.removeItem('admin_logged_in');
+    router.push('/admin/login');
+  };
+
+  // Prevent flash of content
+  if (!isAuthenticated && pathname !== '/admin/login') {
+    return <div style={{ height: '100vh', background: '#0f172a' }}></div>;
+  }
 
   const navItems = [
     { name: 'Dashboard', href: '/admin', icon: '📊' },
@@ -61,14 +90,18 @@ export default function AdminLayout({
               onClick={() => setIsSidebarOpen(false)}
             >
               <span className="icon">{item.icon}</span>
-              <span>{item.name}</span>
+              <span className="nav-text">{item.name}</span>
             </Link>
           ))}
         </nav>
         <div className="sidebar-footer">
-          <Link href="/" className="nav-item logout">
+          <button onClick={handleLogout} className="nav-item logout" style={{ background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left', width: '100%' }}>
             <span className="icon">🚪</span>
-            <span>Exit to Site</span>
+            <span className="nav-text">Logout</span>
+          </button>
+          <Link href="/" className="nav-item" style={{ marginTop: '0.5rem' }}>
+            <span className="icon">🏠</span>
+            <span className="nav-text">Back to Site</span>
           </Link>
         </div>
       </aside>
@@ -159,16 +192,17 @@ export default function AdminLayout({
           flex-direction: row !important;
           align-items: center !important;
           justify-content: flex-start !important;
-          gap: 1.25rem;
-          padding: 0.85rem 1.5rem;
+          gap: 0.75rem;
+          padding: 0.85rem 1.25rem;
           color: rgba(255,255,255,0.7);
           text-decoration: none;
           transition: all var(--transition-smooth);
           border-radius: var(--border-radius-md);
           width: 100%;
-          font-weight: 600;
+          font-weight: 500;
           font-size: 0.95rem;
           text-align: left;
+          line-height: 1;
         }
         .nav-item:hover {
           color: white;
@@ -181,11 +215,17 @@ export default function AdminLayout({
           box-shadow: 0 4px 12px rgba(19, 114, 154, 0.4);
         }
         .icon {
-          font-size: 1.1rem;
-          min-width: 24px;
-          display: flex;
+          font-size: 1.25rem;
+          width: 24px;
+          height: 24px;
+          display: inline-flex;
           align-items: center;
           justify-content: center;
+          flex-shrink: 0;
+        }
+        .nav-text {
+          display: inline-block;
+          white-space: nowrap;
         }
         .sidebar-footer {
           padding: 1rem 1rem 2rem;
@@ -245,3 +285,4 @@ export default function AdminLayout({
     </div>
   );
 }
+

@@ -4,6 +4,12 @@ import { useState, useEffect } from 'react';
 
 export default function CategoriesPage() {
     const [categories, setCategories] = useState([]);
+    const [showAddForm, setShowAddForm] = useState(false);
+    const [formData, setFormData] = useState({
+        name: '',
+        image: '',
+        link: ''
+    });
 
     useEffect(() => {
         fetchCategories();
@@ -14,6 +20,60 @@ export default function CategoriesPage() {
             .then(res => res.json())
             .then(data => setCategories(data))
             .catch(err => console.error('Error fetching categories:', err));
+    };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData(prev => {
+            const newData = { ...prev, [name]: value };
+            // Auto generate link if name is changed
+            if (name === 'name') {
+                newData.link = `/best_deals?tab=${encodeURIComponent(value)}`;
+            }
+            return newData;
+        });
+    };
+
+    const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const data = new FormData();
+            data.append('file', file);
+            try {
+                const res = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: data
+                });
+                const result = await res.json();
+                if (result.url) {
+                    setFormData(prev => ({ ...prev, image: result.url }));
+                }
+            } catch (err) {
+                console.error('Upload failed', err);
+                alert('Image upload failed');
+            }
+        }
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            const res = await fetch('/api/categories', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            });
+
+            if (res.ok) {
+                fetchCategories();
+                setShowAddForm(false);
+                setFormData({ name: '', image: '', link: '' });
+            } else {
+                alert('Failed to add category');
+            }
+        } catch (error) {
+            console.error('Error adding category:', error);
+        }
     };
 
     const handleDelete = async (id: string) => {
@@ -33,7 +93,68 @@ export default function CategoriesPage() {
 
     return (
         <div className="admin-page">
-            <h1 className="page-title">Manage Categories</h1>
+            <div className="header">
+                <h1 className="page-title">Manage Categories</h1>
+                <button
+                    className="add-btn"
+                    onClick={() => setShowAddForm(!showAddForm)}
+                >
+                    {showAddForm ? '✕ Close Form' : '+ Add New Category'}
+                </button>
+            </div>
+
+            {showAddForm && (
+                <div className="add-category-form">
+                    <form onSubmit={handleSubmit} className="form-container">
+                        <h2>Add New Category</h2>
+                        <div className="form-group">
+                            <label>Category Name</label>
+                            <input
+                                name="name"
+                                value={formData.name}
+                                required
+                                onChange={handleChange}
+                                placeholder="e.g. Smart Watches"
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Image</label>
+                            <div className="upload-container">
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleUpload}
+                                    className="file-input"
+                                />
+                            </div>
+                            <input
+                                name="image"
+                                value={formData.image}
+                                required
+                                onChange={handleChange}
+                                placeholder="Image URL or Upload File"
+                                className="url-input"
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Auto-generated Link</label>
+                            <input
+                                name="link"
+                                value={formData.link}
+                                required
+                                onChange={handleChange}
+                                placeholder="/best_deals?tab=..."
+                            />
+                            <small>This link is automatically generated based on the name.</small>
+                        </div>
+
+                        <button type="submit" className="submit-btn">Save Category</button>
+                    </form>
+                </div>
+            )}
+
             <div className="table-container">
                 <table className="admin-table">
                     <thead>
@@ -48,8 +169,8 @@ export default function CategoriesPage() {
                         {categories.map((cat: any) => (
                             <tr key={cat.id}>
                                 <td data-label="Image"><img src={cat.image} alt={cat.name} className="thumb" /></td>
-                                <td data-label="Name">{cat.name}</td>
-                                <td data-label="Link">{cat.link}</td>
+                                <td data-label="Name" className="cat-name">{cat.name}</td>
+                                <td data-label="Link" className="cat-link">{cat.link}</td>
                                 <td data-label="Actions">
                                     <button className="del-btn" onClick={() => handleDelete(cat.id)}>Delete</button>
                                 </td>
@@ -58,6 +179,7 @@ export default function CategoriesPage() {
                     </tbody>
                 </table>
             </div>
+
             <style jsx>{`
                 .admin-page {
                     animation: fadeIn 0.5s ease-out;
@@ -66,14 +188,114 @@ export default function CategoriesPage() {
                     from { opacity: 0; transform: translateY(10px); }
                     to { opacity: 1; transform: translateY(0); }
                 }
+                .header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 2.5rem;
+                }
                 .page-title {
                     font-family: var(--font-heading);
                     font-size: 2.25rem;
                     font-weight: 800;
                     color: var(--text-main);
-                    margin-bottom: 2.5rem;
+                    margin-bottom: 0;
                     letter-spacing: -0.02em;
                 }
+                .add-btn {
+                    background: var(--accent-blue);
+                    color: white;
+                    border: none;
+                    padding: 12px 24px;
+                    border-radius: var(--border-radius-md);
+                    font-weight: 700;
+                    cursor: pointer;
+                    transition: all var(--transition-fast);
+                    box-shadow: 0 4px 12px rgba(19, 114, 154, 0.2);
+                }
+                .add-btn:hover {
+                    background: var(--accent-blue-hover);
+                    transform: translateY(-2px);
+                }
+
+                .add-category-form {
+                    margin-bottom: 3rem;
+                }
+                .form-container {
+                    background: white;
+                    padding: 2.5rem;
+                    border-radius: var(--border-radius-xl);
+                    box-shadow: var(--shadow-lg);
+                    border: 1px solid var(--bg-tertiary);
+                    max-width: 600px;
+                }
+                .form-container h2 {
+                    margin-bottom: 1.5rem;
+                    font-size: 1.25rem;
+                    font-weight: 700;
+                }
+                .form-group {
+                    margin-bottom: 1.5rem;
+                }
+                label {
+                    display: block;
+                    margin-bottom: 0.5rem;
+                    font-weight: 700;
+                    color: var(--text-main);
+                    font-size: 0.9rem;
+                }
+                input {
+                    width: 100%;
+                    padding: 12px;
+                    border: 1px solid var(--bg-tertiary);
+                    border-radius: var(--border-radius-md);
+                    font-size: 1rem;
+                    background: var(--bg-secondary);
+                    transition: all var(--transition-fast);
+                }
+                input:focus {
+                    outline: none;
+                    border-color: var(--accent-blue);
+                    background: white;
+                }
+                .upload-container {
+                    background: var(--bg-tertiary);
+                    padding: 10px;
+                    border-radius: var(--border-radius-md);
+                    margin-bottom: 10px;
+                }
+                .file-input {
+                    font-size: 0.85rem;
+                    border: none;
+                    padding: 0;
+                    background: transparent;
+                }
+                .url-input {
+                    margin-top: 5px;
+                }
+                small {
+                    color: var(--text-muted);
+                    font-size: 0.8rem;
+                    display: block;
+                    margin-top: 5px;
+                }
+                .submit-btn {
+                    width: 100%;
+                    padding: 14px;
+                    background: var(--accent-blue);
+                    color: white;
+                    border: none;
+                    border-radius: var(--border-radius-md);
+                    font-weight: 800;
+                    font-size: 1rem;
+                    cursor: pointer;
+                    transition: all var(--transition-fast);
+                }
+                .submit-btn:hover {
+                    opacity: 0.9;
+                    transform: scale(0.99);
+                }
+
                 .table-container {
                     background: white;
                     border-radius: var(--border-radius-xl);
@@ -84,7 +306,6 @@ export default function CategoriesPage() {
                 .admin-table {
                     width: 100%;
                     border-collapse: collapse;
-                    min-width: 600px;
                 }
                 th, td {
                     padding: 1.25rem 1.5rem;
@@ -97,7 +318,6 @@ export default function CategoriesPage() {
                     color: var(--text-muted);
                     font-size: 0.9rem;
                     text-transform: uppercase;
-                    letter-spacing: 0.05em;
                 }
                 .thumb {
                     width: 60px;
@@ -106,6 +326,15 @@ export default function CategoriesPage() {
                     border-radius: var(--border-radius-md);
                     background: var(--bg-tertiary);
                     padding: 4px;
+                }
+                .cat-name {
+                    font-weight: 700;
+                    color: var(--text-main);
+                }
+                .cat-link {
+                    color: var(--text-muted);
+                    font-size: 0.9rem;
+                    font-family: monospace;
                 }
                 .del-btn {
                     background: #fee2e2;
@@ -116,24 +345,24 @@ export default function CategoriesPage() {
                     cursor: pointer;
                     font-weight: 700;
                     transition: all var(--transition-fast);
-                    font-size: 0.85rem;
                 }
                 .del-btn:hover {
                     background: #dc2626;
                     color: white;
-                    transform: translateY(-1px);
                 }
                 
                 @media (max-width: 768px) {
-                    .admin-table { min-width: 100%; }
+                    .header {
+                        flex-direction: column;
+                        align-items: flex-start;
+                        gap: 1rem;
+                    }
                     .admin-table thead { display: none; }
                     .admin-table tr {
                         display: block;
-                        background: white;
                         margin-bottom: 1.5rem;
-                        border: 1px solid var(--bg-tertiary);
-                        border-radius: var(--border-radius-lg);
                         padding: 1rem;
+                        border: 1px solid var(--bg-tertiary);
                     }
                     .admin-table td {
                         display: flex;
@@ -141,14 +370,13 @@ export default function CategoriesPage() {
                         justify-content: space-between;
                         padding: 0.75rem 0;
                         border-bottom: 1px solid var(--bg-tertiary);
-                        text-align: right;
                     }
                     .admin-table td::before {
                         content: attr(data-label);
                         font-weight: 700;
                         color: var(--text-muted);
                     }
-                    .admin-table td:last-child { border-bottom: none; padding-top: 1rem; }
+                    .admin-table td:last-child { border-bottom: none; }
                 }
             `}</style>
         </div>
