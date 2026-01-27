@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/utils/supabase';
+import { getSupabase } from '@/utils/supabase';
 
 export async function POST(request: Request) {
     try {
+        const supabase = getSupabase();
         const formData = await request.formData();
         const file = formData.get('file') as File;
 
@@ -23,6 +24,7 @@ export async function POST(request: Request) {
             });
 
         if (error) {
+            console.error('Supabase Storage Error:', error);
             return NextResponse.json({ error: error.message }, { status: 500 });
         }
 
@@ -32,8 +34,8 @@ export async function POST(request: Request) {
             .getPublicUrl(filename);
 
         return NextResponse.json({ url: publicUrl });
-    } catch (error) {
+    } catch (error: any) {
         console.error('Upload error:', error);
-        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+        return NextResponse.json({ error: error.message || 'Internal Server Error' }, { status: 500 });
     }
 }

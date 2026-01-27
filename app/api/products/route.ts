@@ -1,20 +1,26 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/utils/supabase';
+import { getSupabase } from '@/utils/supabase';
 
 export async function GET() {
-    const { data, error } = await supabase
-        .from('products')
-        .select('*')
-        .order('created_at', { ascending: false });
+    try {
+        const supabase = getSupabase();
+        const { data, error } = await supabase
+            .from('products')
+            .select('*')
+            .order('created_at', { ascending: false });
 
-    if (error) {
+        if (error) {
+            return NextResponse.json({ error: error.message }, { status: 500 });
+        }
+        return NextResponse.json(data);
+    } catch (error: any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
-    return NextResponse.json(data);
 }
 
 export async function POST(request: Request) {
     try {
+        const supabase = getSupabase();
         const body = await request.json();
 
         const { data, error } = await supabase
@@ -24,11 +30,12 @@ export async function POST(request: Request) {
             .single();
 
         if (error) {
+            console.error('Supabase Error:', error);
             return NextResponse.json({ error: error.message }, { status: 500 });
         }
 
         return NextResponse.json(data, { status: 201 });
-    } catch (error) {
-        return NextResponse.json({ error: 'Failed to create product' }, { status: 500 });
+    } catch (error: any) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }

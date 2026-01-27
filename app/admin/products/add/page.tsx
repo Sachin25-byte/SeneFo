@@ -29,10 +29,21 @@ export default function AddProductPage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
+            // Convert numbers and ensure arrays
+            const submissionData = {
+                ...formData,
+                rating: Number(formData.rating),
+                reviews_count: Number(formData.reviewsCount),
+                images: Array.isArray(formData.images) ? formData.images : []
+            };
+
+            // Remove the old camelCase key
+            delete (submissionData as any).reviewsCount;
+
             const res = await fetch('/api/products', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(submissionData)
             });
 
             if (res.ok) {

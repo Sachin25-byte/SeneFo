@@ -9,6 +9,8 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
     const [formData, setFormData] = useState({
         title: '',
         image: '',
+        images: [] as string[],
+        video: '',
         originalPrice: '',
         discountedPrice: '',
         rating: 5,
@@ -21,7 +23,13 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
     useEffect(() => {
         fetch(`/api/products/${id}`)
             .then(res => res.json())
-            .then(data => setFormData(data))
+            .then(data => {
+                setFormData({
+                    ...data,
+                    images: data.images || [],
+                    video: data.video || ''
+                });
+            })
             .catch(err => console.error('Error fetching product:', err));
     }, [id]);
 
@@ -35,10 +43,17 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
+            const submissionData = {
+                ...formData,
+                rating: Number(formData.rating),
+                reviewsCount: Number(formData.reviewsCount),
+                images: Array.isArray(formData.images) ? formData.images : []
+            };
+
             const res = await fetch(`/api/products/${id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(submissionData)
             });
 
             if (res.ok) {
