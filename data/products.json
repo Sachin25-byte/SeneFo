@@ -15,5 +15,50 @@
     "discount": "12",
     "category": "Mobile Accessories",
     "link": "https://amzn.to/4rgJxaS"
+  },
+  {
+    "id": "f7373786-1456-4db2-83a3-f43567210e63",
+    "title": "a",
+    "image": "/uploads/1769507388818_pexels-alipazani-2584269.jpg",
+    "images": [
+      "/uploads/1769507394658_pexels-eliasdecarvalho-1375849.jpg",
+      "/uploads/1769507397570_asd.jpg"
+    ],
+    "video": "",
+    "originalPrice": "10000",
+    "discountedPrice": "8999",
+    "rating": 5,
+    "reviewsCount": 0,
+    "discount": "10% OFF",
+    "category": "Speakers",
+    "link": "https://amzn.to/4rgJxaS"
+  },
+  {
+    "id": "64a3efb8-e45a-4f86-9487-c7525752e0dc",
+    "title": "asd",
+    "image": "/uploads/1769507463799_asd.jpg",
+    "images": [],
+    "video": "adf",
+    "originalPrice": "100",
+    "discountedPrice": "1,499",
+    "rating": 5,
+    "reviewsCount": 0,
+    "discount": "98% OFF",
+    "category": "Mobile Accessories",
+    "link": "https://amzn.to/4k0lZV7"
+  },
+  {
+    "id": "ce942c66-9f19-48e1-9081-6799403997e0",
+    "title": "a",
+    "image": "/uploads/1769507501899_as.jpg",
+    "images": [],
+    "video": "",
+    "originalPrice": "1,999",
+    "discountedPrice": "1,499",
+    "rating": 5,
+    "reviewsCount": 0,
+    "discount": "10%",
+    "category": "Mobile",
+    "link": "#"
   }
 ]

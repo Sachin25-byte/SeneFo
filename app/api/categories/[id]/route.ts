@@ -1,21 +1,63 @@
 import { NextResponse } from 'next/server';
-import { readData, writeData } from '@/utils/data';
-
-const FILE_NAME = 'categories.json';
+import { supabase } from '@/utils/supabase';
 
 export async function DELETE(
     request: Request,
     { params }: { params: Promise<{ id: string }> }
 ) {
     const { id } = await params;
-    const items = readData(FILE_NAME);
-    const filteredItems = items.filter((item: any) => item.id !== id);
 
-    if (items.length === filteredItems.length) {
-        return NextResponse.json({ error: 'Category not found' }, { status: 404 });
+    const { error } = await supabase
+        .from('categories')
+        .delete()
+        .eq('id', id);
+
+    if (error) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    writeData(FILE_NAME, filteredItems);
-
     return NextResponse.json({ success: true });
+}
+
+export async function GET(
+    request: Request,
+    { params }: { params: Promise<{ id: string }> }
+) {
+    const { id } = await params;
+
+    const { data, error } = await supabase
+        .from('categories')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+    if (error) {
+        return NextResponse.json({ error: error.message }, { status: 404 });
+    }
+
+    return NextResponse.json(data);
+}
+
+export async function PUT(
+    request: Request,
+    { params }: { params: Promise<{ id: string }> }
+) {
+    const { id } = await params;
+    const body = await request.json();
+
+    // Remove id from body to avoid trying to update it
+    const { id: _, ...updateData } = body;
+
+    const { data, error } = await supabase
+        .from('categories')
+        .update(updateData)
+        .eq('id', id)
+        .select()
+        .single();
+
+    if (error) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    return NextResponse.json(data);
 }

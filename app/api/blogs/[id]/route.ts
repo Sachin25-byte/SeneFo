@@ -1,21 +1,20 @@
 import { NextResponse } from 'next/server';
-import { readData, writeData } from '@/utils/data';
-
-const FILE_NAME = 'blogs.json';
+import { supabase } from '@/utils/supabase';
 
 export async function DELETE(
     request: Request,
     { params }: { params: Promise<{ id: string }> }
 ) {
     const { id } = await params;
-    const blogs = readData(FILE_NAME);
-    const filteredBlogs = blogs.filter((b: any) => b.id !== id);
 
-    if (blogs.length === filteredBlogs.length) {
-        return NextResponse.json({ error: 'Blog not found' }, { status: 404 });
+    const { error } = await supabase
+        .from('blogs')
+        .delete()
+        .eq('id', id);
+
+    if (error) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
     }
-
-    writeData(FILE_NAME, filteredBlogs);
 
     return NextResponse.json({ success: true });
 }
@@ -25,14 +24,18 @@ export async function GET(
     { params }: { params: Promise<{ id: string }> }
 ) {
     const { id } = await params;
-    const blogs = readData(FILE_NAME);
-    const blog = blogs.find((b: any) => b.id === id);
 
-    if (!blog) {
-        return NextResponse.json({ error: 'Blog post not found' }, { status: 404 });
+    const { data, error } = await supabase
+        .from('blogs')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+    if (error) {
+        return NextResponse.json({ error: error.message }, { status: 404 });
     }
 
-    return NextResponse.json(blog);
+    return NextResponse.json(data);
 }
 
 export async function PUT(
@@ -41,16 +44,20 @@ export async function PUT(
 ) {
     const { id } = await params;
     const body = await request.json();
-    const blogs = readData(FILE_NAME);
 
-    const index = blogs.findIndex((b: any) => b.id === id);
+    // Remove id from body to avoid trying to update it
+    const { id: _, ...updateData } = body;
 
-    if (index === -1) {
-        return NextResponse.json({ error: 'Blog post not found' }, { status: 404 });
+    const { data, error } = await supabase
+        .from('blogs')
+        .update(updateData)
+        .eq('id', id)
+        .select()
+        .single();
+
+    if (error) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    blogs[index] = { ...blogs[index], ...body };
-    writeData(FILE_NAME, blogs);
-
-    return NextResponse.json(blogs[index]);
+    return NextResponse.json(data);
 }

@@ -1,42 +1,41 @@
 import { NextResponse } from 'next/server';
-import { readData, writeData, dataPath } from '@/utils/data';
-import path from 'path';
-
-const FILE_NAME = 'products.json';
+import { supabase } from '@/utils/supabase';
 
 export async function DELETE(
     request: Request,
     { params }: { params: Promise<{ id: string }> }
 ) {
     const { id } = await params;
-    // console.log(`Attempting to delete product with ID: ${id}`);
 
-    const products = readData(FILE_NAME);
-    const filteredProducts = products.filter((p: any) => p.id !== id);
+    const { error } = await supabase
+        .from('products')
+        .delete()
+        .eq('id', id);
 
-    if (products.length === filteredProducts.length) {
-        return NextResponse.json({ error: 'Product not found' }, { status: 404 });
+    if (error) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
     }
-
-    writeData(FILE_NAME, filteredProducts);
 
     return NextResponse.json({ success: true });
 }
-
 
 export async function GET(
     request: Request,
     { params }: { params: Promise<{ id: string }> }
 ) {
     const { id } = await params;
-    const products = readData(FILE_NAME);
-    const product = products.find((p: any) => p.id === id);
 
-    if (!product) {
-        return NextResponse.json({ error: 'Product not found' }, { status: 404 });
+    const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+    if (error) {
+        return NextResponse.json({ error: error.message }, { status: 404 });
     }
 
-    return NextResponse.json(product);
+    return NextResponse.json(data);
 }
 
 export async function PUT(
@@ -45,16 +44,20 @@ export async function PUT(
 ) {
     const { id } = await params;
     const body = await request.json();
-    const products = readData(FILE_NAME);
 
-    const index = products.findIndex((p: any) => p.id === id);
+    // Remove id from body to avoid trying to update it
+    const { id: _, ...updateData } = body;
 
-    if (index === -1) {
-        return NextResponse.json({ error: 'Product not found' }, { status: 404 });
+    const { data, error } = await supabase
+        .from('products')
+        .update(updateData)
+        .eq('id', id)
+        .select()
+        .single();
+
+    if (error) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    products[index] = { ...products[index], ...body };
-    writeData(FILE_NAME, products);
-
-    return NextResponse.json(products[index]);
+    return NextResponse.json(data);
 }

@@ -1,28 +1,33 @@
 import { NextResponse } from 'next/server';
-import { readData, writeData } from '@/utils/data';
-import { v4 as uuidv4 } from 'uuid';
-
-const FILE_NAME = 'blogs.json';
+import { supabase } from '@/utils/supabase';
 
 export async function GET() {
-    const blogs = readData(FILE_NAME);
-    return NextResponse.json(blogs);
+    const { data, error } = await supabase
+        .from('blogs')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+    if (error) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+    return NextResponse.json(data);
 }
 
 export async function POST(request: Request) {
     try {
         const body = await request.json();
-        const blogs = readData(FILE_NAME);
 
-        const newBlog = {
-            id: uuidv4(),
-            ...body
-        };
+        const { data, error } = await supabase
+            .from('blogs')
+            .insert([body])
+            .select()
+            .single();
 
-        blogs.push(newBlog);
-        writeData(FILE_NAME, blogs);
+        if (error) {
+            return NextResponse.json({ error: error.message }, { status: 500 });
+        }
 
-        return NextResponse.json(newBlog, { status: 201 });
+        return NextResponse.json(data, { status: 201 });
     } catch (error) {
         return NextResponse.json({ error: 'Failed to create blog' }, { status: 500 });
     }

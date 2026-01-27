@@ -1,21 +1,21 @@
 import { NextResponse } from 'next/server';
-import { readData, writeData } from '@/utils/data';
-
-const FILE_NAME = 'reviews.json';
+import { supabase } from '@/utils/supabase';
 
 export async function DELETE(
     request: Request,
     { params }: { params: Promise<{ id: string }> }
 ) {
     const { id } = await params;
-    const items = readData(FILE_NAME);
-    const filteredItems = items.filter((item: any) => item.id !== id);
 
-    if (items.length === filteredItems.length) {
-        return NextResponse.json({ error: 'Review not found' }, { status: 404 });
+    const { error } = await supabase
+        .from('reviews')
+        .delete()
+        .eq('id', id);
+
+    if (error) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    writeData(FILE_NAME, filteredItems);
     return NextResponse.json({ success: true });
 }
 
@@ -24,14 +24,18 @@ export async function GET(
     { params }: { params: Promise<{ id: string }> }
 ) {
     const { id } = await params;
-    const items = readData(FILE_NAME);
-    const item = items.find((i: any) => i.id === id);
 
-    if (!item) {
-        return NextResponse.json({ error: 'Review not found' }, { status: 404 });
+    const { data, error } = await supabase
+        .from('reviews')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+    if (error) {
+        return NextResponse.json({ error: error.message }, { status: 404 });
     }
 
-    return NextResponse.json(item);
+    return NextResponse.json(data);
 }
 
 export async function PUT(
@@ -40,16 +44,20 @@ export async function PUT(
 ) {
     const { id } = await params;
     const body = await request.json();
-    const items = readData(FILE_NAME);
 
-    const index = items.findIndex((i: any) => i.id === id);
+    // Remove id from body to avoid trying to update it
+    const { id: _, ...updateData } = body;
 
-    if (index === -1) {
-        return NextResponse.json({ error: 'Review not found' }, { status: 404 });
+    const { data, error } = await supabase
+        .from('reviews')
+        .update(updateData)
+        .eq('id', id)
+        .select()
+        .single();
+
+    if (error) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    items[index] = { ...items[index], ...body };
-    writeData(FILE_NAME, items);
-
-    return NextResponse.json(items[index]);
+    return NextResponse.json(data);
 }
