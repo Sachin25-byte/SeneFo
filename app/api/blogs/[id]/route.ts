@@ -46,7 +46,7 @@ export async function PUT(
     const body = await request.json();
 
     // Remove id from body to avoid trying to update it
-    const { id: _, ...updateData } = body;
+    const { id: _, rating, ...updateData } = body;
 
     const { data, error } = await supabase
         .from('blogs')

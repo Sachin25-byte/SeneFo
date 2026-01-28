@@ -31,7 +31,6 @@ export async function POST(request: Request) {
         // Add default fields if missing and ensure types
         const blogData = {
             ...body,
-            rating: body.rating ? Number(body.rating) : 5,
             author: body.author || 'Admin',
             date: body.date || new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
         };

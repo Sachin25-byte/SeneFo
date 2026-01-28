@@ -13,7 +13,6 @@ export default function EditBlogPage({ params }: { params: { id: string } }) {
         video: '',
         excerpt: '',
         category: '',
-        rating: 5,
         date: ''
     });
 

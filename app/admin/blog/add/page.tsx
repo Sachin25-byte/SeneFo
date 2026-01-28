@@ -12,7 +12,6 @@ export default function AddBlogPage() {
         video: '',
         excerpt: '',
         category: '',
-        rating: 5,
         date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
     });
 
@@ -35,10 +34,12 @@ export default function AddBlogPage() {
             if (res.ok) {
                 router.push('/admin/blog');
             } else {
-                alert('Failed to create post');
+                const errorData = await res.json();
+                alert(`Failed to create post: ${errorData.error || 'Unknown error'}`);
             }
         } catch (error) {
             console.error('Error creating post', error);
+            alert('An unexpected error occurred');
         }
     };
 
