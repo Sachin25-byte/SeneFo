@@ -5,8 +5,6 @@ import { useState } from 'react';
 export default function ProductCard({ product }) {
   const [wished, setWished] = useState(false);
 
-  const discount = Math.round((1 - product.price / product.originalPrice) * 100);
-
   return (
     <Link to={`/product/${product.id}`} className="group block">
       <div className="bg-white rounded-2xl overflow-hidden border border-pink-50 shadow-sm hover:shadow-xl hover:shadow-pink-100 transition-all duration-300 hover:-translate-y-1">
@@ -22,11 +20,6 @@ export default function ProductCard({ product }) {
             {product.badge && (
               <span className="bg-rose-700 text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow-sm">
                 {product.badge}
-              </span>
-            )}
-            {discount > 0 && (
-              <span className="bg-green-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow-sm">
-                -{discount}%
               </span>
             )}
           </div>
@@ -79,10 +72,7 @@ export default function ProductCard({ product }) {
 
           {/* Price */}
           <div className="flex items-center gap-2">
-            <span className="text-base font-black text-gray-900">₹{product.price.toLocaleString()}</span>
-            {product.originalPrice && (
-              <span className="text-xs text-gray-400 line-through">₹{product.originalPrice.toLocaleString()}</span>
-            )}
+            <span className="text-sm font-bold text-rose-700 underline decoration-rose-200 underline-offset-4">Check Price on Amazon</span>
           </div>
         </div>
       </div>

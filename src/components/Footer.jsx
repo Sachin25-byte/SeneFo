@@ -66,7 +66,10 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-gray-800 py-5 text-center text-xs text-gray-500">
+      <div className="border-t border-gray-800 pt-6 pb-5 text-center text-xs text-gray-500">
+        <p className="max-w-2xl mx-auto mb-4 text-gray-400 px-4">
+          This website contains affiliate links. We may earn a commission when you purchase through our links at no extra cost to you.
+        </p>
         <p className="flex items-center justify-center gap-1">
           © 2026 SeneFo. Made with <Heart size={12} className="text-rose-700 fill-rose-700" /> for every girl.
         </p>

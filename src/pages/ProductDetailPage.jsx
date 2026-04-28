@@ -22,7 +22,6 @@ export default function ProductDetailPage() {
     </div>
   );
 
-  const discount = Math.round((1 - product.price / product.originalPrice) * 100);
   const related = products.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
 
   return (
@@ -85,11 +84,14 @@ export default function ProductDetailPage() {
 
           {/* Price */}
           <div className="flex items-center gap-4 py-4 border-y border-pink-50">
-            <span className="text-4xl font-black text-gray-900">₹{product.price.toLocaleString()}</span>
-            <div>
-              <span className="text-gray-400 line-through text-sm">₹{product.originalPrice.toLocaleString()}</span>
-              <span className="ml-2 text-green-500 font-bold text-sm">{discount}% off</span>
-            </div>
+            <a
+              href={product.amazonUrl || "https://www.amazon.in/s?k=" + encodeURIComponent(product.name)}
+              target="_blank"
+              rel="noreferrer"
+              className="text-2xl font-black text-rose-700 hover:text-rose-800 hover:underline transition-all"
+            >
+              Check Price on Amazon
+            </a>
           </div>
 
           {/* Color Selector */}

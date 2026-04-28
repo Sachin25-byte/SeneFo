@@ -35,8 +35,9 @@ const banners = [
 ];
 
 export default function HomePage() {
-  const featured = products.slice(0, 4);
-  const newArrivals = products.filter(p => p.badge === 'New' || p.badge === 'Trending' || p.badge === 'Popular').slice(0, 4);
+  const trending = products.slice(0, 4);
+  const bestDeals = products.slice(4, 8);
+  const under999 = [products[1], products[3], products[6], products[7]];
 
   return (
     <div>
@@ -144,19 +145,19 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Featured Products */}
+      {/* Trending Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <p className="text-rose-700 font-semibold text-sm mb-1">✨ Handpicked for you</p>
-            <h2 className="text-3xl font-black text-gray-900">Featured Styles</h2>
+            <p className="text-rose-700 font-semibold text-sm mb-1">Top rated globally</p>
+            <h2 className="text-3xl font-black text-gray-900">🔥 Trending on Amazon</h2>
           </div>
           <Link to="/products" className="flex items-center gap-1.5 text-rose-700 font-semibold text-sm hover:gap-3 transition-all">
             View All <ArrowRight size={16} />
           </Link>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-          {featured.map(p => <ProductCard key={p.id} product={p} />)}
+          {trending.map(p => <ProductCard key={p.id} product={p} />)}
         </div>
       </section>
 
@@ -179,19 +180,35 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* New Arrivals */}
+      {/* Best Deals Today */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <p className="text-rose-700 font-semibold text-sm mb-1">🌸 Just dropped</p>
-            <h2 className="text-3xl font-black text-gray-900">New Arrivals</h2>
+            <p className="text-rose-700 font-semibold text-sm mb-1">Massive discounts</p>
+            <h2 className="text-3xl font-black text-gray-900">💖 Best Deals Today</h2>
           </div>
-          <Link to="/products?category=New" className="flex items-center gap-1.5 text-rose-700 font-semibold text-sm hover:gap-3 transition-all">
+          <Link to="/products?category=Sale" className="flex items-center gap-1.5 text-rose-700 font-semibold text-sm hover:gap-3 transition-all">
             See All <ArrowRight size={16} />
           </Link>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-          {newArrivals.length ? newArrivals.map(p => <ProductCard key={p.id} product={p} />) : products.slice(4, 8).map(p => <ProductCard key={p.id} product={p} />)}
+          {bestDeals.map(p => <ProductCard key={p.id} product={p} />)}
+        </div>
+      </section>
+
+      {/* Under 999 */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <p className="text-rose-700 font-semibold text-sm mb-1">Budget friendly finds</p>
+            <h2 className="text-3xl font-black text-gray-900">👗 Under ₹999</h2>
+          </div>
+          <Link to="/products" className="flex items-center gap-1.5 text-rose-700 font-semibold text-sm hover:gap-3 transition-all">
+            Shop More <ArrowRight size={16} />
+          </Link>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+          {under999.map(p => <ProductCard key={p.id} product={p} />)}
         </div>
       </section>
 
