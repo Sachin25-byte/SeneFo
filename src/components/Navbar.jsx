@@ -30,11 +30,6 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Announcement Bar */}
-      <div className="bg-rose-700 text-white text-center text-xs py-2 font-medium tracking-wide">
-        🎀 Free Shipping on orders above ₹999 | Use code GIRLY20 for 20% off! 🎀
-      </div>
-
       <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-pink-100 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between h-16">
