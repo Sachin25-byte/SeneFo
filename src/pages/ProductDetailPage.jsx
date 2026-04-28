@@ -2,21 +2,17 @@ import { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Star, Heart, ShoppingBag, ArrowLeft, Share2, ChevronRight, Truck, RotateCcw, Shield } from 'lucide-react';
 import { products } from '../data/products';
-import { useCart } from '../context/CartContext';
 import ProductCard from '../components/ProductCard';
 
 export default function ProductDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { addToCart } = useCart();
   const product = products.find(p => p.id === Number(id));
 
   const [selectedColor, setSelectedColor] = useState(product?.colors[0]);
   const [selectedSize, setSelectedSize] = useState('');
   const [mainImg, setMainImg] = useState(product?.images[0] || product?.image);
   const [wished, setWished] = useState(false);
-  const [added, setAdded] = useState(false);
-  const [sizeError, setSizeError] = useState(false);
 
   if (!product) return (
     <div className="text-center py-32">
@@ -28,14 +24,6 @@ export default function ProductDetailPage() {
 
   const discount = Math.round((1 - product.price / product.originalPrice) * 100);
   const related = products.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
-
-  const handleAddToCart = () => {
-    if (!selectedSize) { setSizeError(true); return; }
-    setSizeError(false);
-    addToCart(product, selectedColor, selectedSize);
-    setAdded(true);
-    setTimeout(() => setAdded(false), 2000);
-  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
@@ -134,7 +122,7 @@ export default function ProductDetailPage() {
               {product.sizes.map(size => (
                 <button
                   key={size}
-                  onClick={() => { setSelectedSize(size); setSizeError(false); }}
+                  onClick={() => { setSelectedSize(size); }}
                   className={`w-12 h-12 rounded-xl text-sm font-bold border-2 transition-all ${
                     selectedSize === size
                       ? 'border-rose-700 bg-rose-700 text-white'
@@ -145,22 +133,19 @@ export default function ProductDetailPage() {
                 </button>
               ))}
             </div>
-            {sizeError && <p className="text-red-400 text-xs mt-2">⚠️ Please select a size</p>}
           </div>
 
           {/* Actions */}
           <div className="flex gap-3">
-            <button
-              onClick={handleAddToCart}
-              className={`flex-1 flex items-center justify-center gap-2 py-4 rounded-2xl font-bold text-sm transition-all ${
-                added
-                  ? 'bg-green-500 text-white'
-                  : 'bg-gradient-to-r from-rose-800 to-rose-900 text-white hover:opacity-90 hover:scale-[1.02] shadow-lg shadow-rose-200'
-              }`}
+            <a
+              href={product.amazonUrl || "https://www.amazon.in/s?k=" + encodeURIComponent(product.name)}
+              target="_blank"
+              rel="noreferrer"
+              className="flex-1 flex items-center justify-center gap-2 py-4 rounded-2xl font-bold text-sm transition-all bg-gradient-to-r from-amber-400 to-amber-500 text-gray-900 hover:opacity-90 hover:scale-[1.02] shadow-lg shadow-amber-200"
             >
               <ShoppingBag size={18} />
-              {added ? '✓ Added to Bag!' : 'Add to Bag'}
-            </button>
+              Shop Now
+            </a>
             <button
               onClick={() => setWished(!wished)}
               className={`w-14 h-14 rounded-2xl border-2 flex items-center justify-center transition-all ${

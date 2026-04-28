@@ -1,164 +1,114 @@
 import express from 'express';
-import mongoose from 'mongoose';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 
-dotenv.config();
-
+const JWT_SECRET = 'senefo_secret_key_2024';
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/senefo')
-  .then(() => console.log('Connected to MongoDB'))
-  .catch(err => console.error('MongoDB connection error:', err));
+// ── In-Memory Data Store ──────────────────────────────────────────────────────
+const makeId = () => Math.random().toString(36).slice(2, 10);
 
-// Models
-const UserSchema = new mongoose.Schema({
-  name: String,
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  role: { type: String, default: 'user' }
-});
-const User = mongoose.model('User', UserSchema);
+// Seed admin user (password: admin123)
+const ADMIN_HASH = await bcrypt.hash('admin123', 10);
+const users = [
+  { _id: makeId(), name: 'Admin', email: 'admin@senefo.com', password: ADMIN_HASH, role: 'admin' }
+];
 
-const ProductSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  price: { type: Number, required: true },
-  image: { type: String, required: true },
-  category: { type: String, required: true },
-  description: { type: String },
-  stock: { type: Number, default: 0 }
-}, { timestamps: true });
-const Product = mongoose.model('Product', ProductSchema);
+const products = [
+  { _id: makeId(), name: 'Floral Summer Dress',   price: 1299, category: 'Dresses',   image: 'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=400', description: 'Light floral dress perfect for summer.',  stock: 20, createdAt: new Date() },
+  { _id: makeId(), name: 'Denim Jacket',           price: 1899, category: 'Jackets',   image: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=400', description: 'Classic denim jacket, slim fit.',          stock: 15, createdAt: new Date() },
+  { _id: makeId(), name: 'Boho Maxi Skirt',        price: 999,  category: 'Skirts',    image: 'https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=400', description: 'Flowy boho style maxi skirt.',            stock: 30, createdAt: new Date() },
+  { _id: makeId(), name: 'Crop Top (Pink)',         price: 699,  category: 'Tops',      image: 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=400', description: 'Trendy pink crop top.',                   stock: 50, createdAt: new Date() },
+];
 
-const OrderSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  items: Array,
-  totalAmount: Number,
-  status: { type: String, default: 'Pending' }
-}, { timestamps: true });
-const Order = mongoose.model('Order', OrderSchema);
+const orders = [
+  { _id: makeId(), userId: { name: 'Priya Sharma', email: 'priya@example.com' }, items: [{ name: 'Floral Summer Dress', qty: 1 }], totalAmount: 1299, status: 'Delivered', createdAt: new Date() },
+  { _id: makeId(), userId: { name: 'Ananya Roy',   email: 'ananya@example.com' }, items: [{ name: 'Denim Jacket', qty: 2 }],       totalAmount: 3798, status: 'Pending',   createdAt: new Date() },
+];
 
-// Middleware
+// ── Middleware ────────────────────────────────────────────────────────────────
 const auth = (req, res, next) => {
   try {
     const token = req.header('Authorization').replace('Bearer ', '');
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback_secret');
-    req.user = decoded;
+    req.user = jwt.verify(token, JWT_SECRET);
     next();
-  } catch (error) {
-    res.status(401).send({ error: 'Please authenticate.' });
+  } catch {
+    res.status(401).json({ error: 'Please authenticate.' });
   }
 };
 
 const adminAuth = (req, res, next) => {
   auth(req, res, () => {
-    if (req.user.role !== 'admin') {
-      return res.status(403).send({ error: 'Access denied.' });
-    }
+    if (req.user.role !== 'admin') return res.status(403).json({ error: 'Access denied.' });
     next();
   });
 };
 
-// Routes - Auth
+// ── Routes - Auth ─────────────────────────────────────────────────────────────
 app.post('/api/admin/login', async (req, res) => {
   try {
     const { email, password } = req.body;
-    // For demo purposes, create default admin if not exists
-    let admin = await User.findOne({ email });
-    if (!admin) {
-      if (email === 'admin@senefo.com' && password === 'admin123') {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        admin = await User.create({ name: 'Admin', email, password: hashedPassword, role: 'admin' });
-      } else {
-        return res.status(401).send({ error: 'Invalid credentials' });
-      }
-    }
-    
+    const admin = users.find(u => u.email === email && u.role === 'admin');
+    if (!admin) return res.status(401).json({ error: 'Invalid credentials' });
+
     const isMatch = await bcrypt.compare(password, admin.password);
-    if (!isMatch) return res.status(401).send({ error: 'Invalid credentials' });
-    
-    const token = jwt.sign({ id: admin._id, role: admin.role }, process.env.JWT_SECRET || 'fallback_secret');
-    res.send({ user: { id: admin._id, name: admin.name, email: admin.email, role: admin.role }, token });
-  } catch (error) {
-    res.status(500).send(error);
+    if (!isMatch) return res.status(401).json({ error: 'Invalid credentials' });
+
+    const token = jwt.sign({ id: admin._id, role: admin.role }, JWT_SECRET);
+    res.json({ user: { id: admin._id, name: admin.name, email: admin.email, role: admin.role }, token });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 
-// Routes - Dashboard Stats
-app.get('/api/admin/stats', adminAuth, async (req, res) => {
-  try {
-    const totalProducts = await Product.countDocuments();
-    const totalOrders = await Order.countDocuments();
-    const totalUsers = await User.countDocuments({ role: 'user' });
-    
-    res.send({ totalProducts, totalOrders, totalUsers });
-  } catch (error) {
-    res.status(500).send(error);
-  }
+// ── Routes - Dashboard Stats ──────────────────────────────────────────────────
+app.get('/api/admin/stats', adminAuth, (req, res) => {
+  res.json({
+    totalProducts: products.length,
+    totalOrders:   orders.length,
+    totalUsers:    users.filter(u => u.role === 'user').length,
+    revenue:       orders.reduce((sum, o) => sum + o.totalAmount, 0)
+  });
 });
 
-// Routes - Products
-app.get('/api/products', async (req, res) => {
-  try {
-    const products = await Product.find().sort({ createdAt: -1 });
-    res.send(products);
-  } catch (error) {
-    res.status(500).send(error);
-  }
+// ── Routes - Products ─────────────────────────────────────────────────────────
+app.get('/api/products', (req, res) => {
+  res.json([...products].sort((a, b) => b.createdAt - a.createdAt));
 });
 
-app.post('/api/products', adminAuth, async (req, res) => {
-  try {
-    const product = new Product(req.body);
-    await product.save();
-    res.status(201).send(product);
-  } catch (error) {
-    res.status(400).send(error);
-  }
+app.post('/api/products', adminAuth, (req, res) => {
+  const product = { _id: makeId(), ...req.body, createdAt: new Date() };
+  products.push(product);
+  res.status(201).json(product);
 });
 
-app.put('/api/products/:id', adminAuth, async (req, res) => {
-  try {
-    const product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    res.send(product);
-  } catch (error) {
-    res.status(400).send(error);
-  }
+app.put('/api/products/:id', adminAuth, (req, res) => {
+  const idx = products.findIndex(p => p._id === req.params.id);
+  if (idx === -1) return res.status(404).json({ error: 'Product not found' });
+  products[idx] = { ...products[idx], ...req.body };
+  res.json(products[idx]);
 });
 
-app.delete('/api/products/:id', adminAuth, async (req, res) => {
-  try {
-    await Product.findByIdAndDelete(req.params.id);
-    res.send({ message: 'Product deleted' });
-  } catch (error) {
-    res.status(500).send(error);
-  }
+app.delete('/api/products/:id', adminAuth, (req, res) => {
+  const idx = products.findIndex(p => p._id === req.params.id);
+  if (idx === -1) return res.status(404).json({ error: 'Product not found' });
+  products.splice(idx, 1);
+  res.json({ message: 'Product deleted' });
 });
 
-// Routes - Orders
-app.get('/api/orders', adminAuth, async (req, res) => {
-  try {
-    const orders = await Order.find().populate('userId', 'name email').sort({ createdAt: -1 });
-    res.send(orders);
-  } catch (error) {
-    res.status(500).send(error);
-  }
+// ── Routes - Orders ───────────────────────────────────────────────────────────
+app.get('/api/orders', adminAuth, (req, res) => {
+  res.json([...orders].sort((a, b) => b.createdAt - a.createdAt));
 });
 
-// Routes - Users
-app.get('/api/users', adminAuth, async (req, res) => {
-  try {
-    const users = await User.find({ role: 'user' }).select('-password');
-    res.send(users);
-  } catch (error) {
-    res.status(500).send(error);
-  }
+// ── Routes - Users ────────────────────────────────────────────────────────────
+app.get('/api/users', adminAuth, (req, res) => {
+  res.json(users.filter(u => u.role === 'user').map(({ password, ...u }) => u));
 });
 
+// ── Start Server ──────────────────────────────────────────────────────────────
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`✅ Server running on port ${PORT} (in-memory mode — no MongoDB needed)`));

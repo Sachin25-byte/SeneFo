@@ -1,21 +1,11 @@
 import { Link } from 'react-router-dom';
 import { Star, Heart, ShoppingBag } from 'lucide-react';
-import { useCart } from '../context/CartContext';
 import { useState } from 'react';
 
 export default function ProductCard({ product }) {
-  const { addToCart } = useCart();
   const [wished, setWished] = useState(false);
-  const [added, setAdded] = useState(false);
 
   const discount = Math.round((1 - product.price / product.originalPrice) * 100);
-
-  const handleQuickAdd = (e) => {
-    e.preventDefault();
-    addToCart(product, product.colors[0], product.sizes[Math.floor(product.sizes.length / 2)]);
-    setAdded(true);
-    setTimeout(() => setAdded(false), 1500);
-  };
 
   return (
     <Link to={`/product/${product.id}`} className="group block">
@@ -51,18 +41,17 @@ export default function ProductCard({ product }) {
             <Heart size={15} fill={wished ? 'currentColor' : 'none'} />
           </button>
 
-          {/* Quick Add overlay */}
+          {/* Shop Now overlay */}
           <div className="absolute bottom-0 left-0 right-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
             <button
-              onClick={handleQuickAdd}
-              className={`w-full py-3 text-sm font-bold flex items-center justify-center gap-2 transition-all ${
-                added
-                  ? 'bg-green-500 text-white'
-                  : 'bg-rose-700 text-white hover:bg-rose-800'
-              }`}
+              onClick={(e) => {
+                e.preventDefault();
+                window.open(product.amazonUrl || "https://www.amazon.in/s?k=" + encodeURIComponent(product.name), "_blank");
+              }}
+              className="w-full py-3 text-sm font-bold flex items-center justify-center gap-2 transition-all bg-amber-500 text-gray-900 hover:bg-amber-600"
             >
               <ShoppingBag size={16} />
-              {added ? '✓ Added to Bag!' : 'Quick Add'}
+              Shop Now
             </button>
           </div>
         </div>
