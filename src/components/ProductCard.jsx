@@ -6,7 +6,7 @@ export default function ProductCard({ product }) {
   const [wished, setWished] = useState(false);
 
   return (
-    <Link to={`/product/${product.id}`} className="group block">
+    <Link to={`/product/${product.id || product._id}`} className="group block">
       <div className="bg-white rounded-2xl overflow-hidden border border-pink-50 shadow-sm hover:shadow-xl hover:shadow-pink-100 transition-all duration-300 hover:-translate-y-1">
         {/* Image */}
         <div className="relative overflow-hidden aspect-[3/4] bg-pink-50">

@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { SlidersHorizontal, X, ChevronDown, Search } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
-import { products, categories } from '../data/products';
+import { products as hardcodedProducts, categories } from '../data/products';
 
 const sortOptions = [
   { label: 'Featured', value: 'featured' },
@@ -17,11 +17,21 @@ export default function ProductsPage() {
   const searchQuery = searchParams.get('search') || '';
   const categoryParam = searchParams.get('category') || 'All';
 
+  const [products, setProducts] = useState(hardcodedProducts);
   const [activeCategory, setActiveCategory] = useState(categoryParam);
   const [sort, setSort] = useState('featured');
   const [filterOpen, setFilterOpen] = useState(false);
   const [localSearch, setLocalSearch] = useState(searchQuery);
   const [priceRange, setPriceRange] = useState([0, 6000]);
+
+  useEffect(() => {
+    fetch('http://localhost:5000/api/products')
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.length > 0) setProducts(data);
+      })
+      .catch(console.error);
+  }, []);
 
   useEffect(() => {
     setActiveCategory(categoryParam);

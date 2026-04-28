@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import { ArrowRight, Truck, RotateCcw, Shield, Star, Sparkles, ChevronRight } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
-import { products, categories } from '../data/products';
+import { products as hardcodedProducts, categories } from '../data/products';
 
 const heroSlides = [
   {
@@ -35,9 +36,20 @@ const banners = [
 ];
 
 export default function HomePage() {
+  const [products, setProducts] = useState(hardcodedProducts);
+
+  useEffect(() => {
+    fetch('http://localhost:5000/api/products')
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.length > 0) setProducts(data);
+      })
+      .catch(err => console.error(err));
+  }, []);
+
   const trending = products.slice(0, 4);
   const bestDeals = products.slice(4, 8);
-  const under999 = [products[1], products[3], products[6], products[7]];
+  const under999 = products.slice(0, 4); // Reused since prices are hidden
 
   return (
     <div>

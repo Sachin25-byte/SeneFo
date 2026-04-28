@@ -7,7 +7,7 @@ export default function AdminProducts() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [formData, setFormData] = useState({
-    name: '', price: '', category: '', image: '', description: '', stock: ''
+    name: '', category: '', image: '', description: '', stock: ''
   });
 
   const fetchProducts = async () => {
@@ -30,14 +30,25 @@ export default function AdminProducts() {
     if (product) {
       setEditingId(product._id);
       setFormData({
-        name: product.name, price: product.price, category: product.category,
+        name: product.name, category: product.category,
         image: product.image, description: product.description || '', stock: product.stock || 0
       });
     } else {
       setEditingId(null);
-      setFormData({ name: '', price: '', category: '', image: '', description: '', stock: '' });
+      setFormData({ name: '', category: '', image: '', description: '', stock: '' });
     }
     setIsModalOpen(true);
+  };
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData({ ...formData, image: reader.result });
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -101,7 +112,6 @@ export default function AdminProducts() {
               <tr className="bg-gray-50 border-b border-gray-100 text-gray-500 font-medium text-sm">
                 <th className="px-6 py-4">Product</th>
                 <th className="px-6 py-4">Category</th>
-                <th className="px-6 py-4">Price</th>
                 <th className="px-6 py-4">Stock</th>
                 <th className="px-6 py-4 text-right">Actions</th>
               </tr>
@@ -126,7 +136,6 @@ export default function AdminProducts() {
                       {product.category}
                     </span>
                   </td>
-                  <td className="px-6 py-4 font-medium text-gray-900">₹{product.price}</td>
                   <td className="px-6 py-4 text-gray-600">{product.stock || 0}</td>
                   <td className="px-6 py-4">
                     <div className="flex items-center justify-end gap-2">
@@ -170,21 +179,18 @@ export default function AdminProducts() {
             </div>
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
               <div className="grid grid-cols-2 gap-4">
-                <div className="col-span-2">
+                <div>
                   <label className="block text-sm font-bold text-gray-700 mb-2">Product Name</label>
                   <input type="text" required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-rose-200 focus:border-rose-400 outline-none" />
-                </div>
-                <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-2">Price (₹)</label>
-                  <input type="number" required value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-rose-200 focus:border-rose-400 outline-none" />
                 </div>
                 <div>
                   <label className="block text-sm font-bold text-gray-700 mb-2">Category</label>
                   <input type="text" required value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-rose-200 focus:border-rose-400 outline-none" />
                 </div>
                 <div className="col-span-2">
-                  <label className="block text-sm font-bold text-gray-700 mb-2">Image URL</label>
-                  <input type="text" required value={formData.image} onChange={e => setFormData({...formData, image: e.target.value})} className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-rose-200 focus:border-rose-400 outline-none" />
+                  <label className="block text-sm font-bold text-gray-700 mb-2">Upload Image</label>
+                  <input type="file" accept="image/*" onChange={handleImageUpload} className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-rose-200 focus:border-rose-400 outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-rose-50 file:text-rose-700 hover:file:bg-rose-100 cursor-pointer" />
+                  {formData.image && <img src={formData.image} alt="Preview" className="h-16 mt-3 rounded object-cover" />}
                 </div>
                 <div>
                   <label className="block text-sm font-bold text-gray-700 mb-2">Stock</label>
